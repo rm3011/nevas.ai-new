@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { motion } from "motion/react";
-import { Mail, MapPin, Phone, Send } from "lucide-react";
+import { Mail, MapPin, Phone, ArrowRight } from "lucide-react";
 import emailjs from "@emailjs/browser";
 import ownerImage from "../assets/owner-optimized.png";
 
@@ -8,9 +8,9 @@ import ownerImage from "../assets/owner-optimized.png";
 /* EmailJS config                                                      */
 /* ------------------------------------------------------------------ */
 
-const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
-const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
-const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
 /* ------------------------------------------------------------------ */
 /* Data                                                                */
@@ -48,7 +48,7 @@ const SOCIALS = [
   {
     label: "LinkedIn",
     href: "https://www.linkedin.com/company/nevasai/",
-    path: "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z",
+    path: "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 24 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z",
   },
   {
     label: "YouTube",
@@ -112,20 +112,21 @@ export default function ContactSection() {
     <section
       id="contact"
       aria-labelledby="contact-heading"
-      className="relative isolate w-full overflow-hidden bg-cyber-bg py-16 px-4 sm:py-20 sm:px-6 lg:py-24 lg:px-14"
+      className="relative isolate w-full overflow-hidden bg-cyber-bg px-4 py-14 sm:px-6 sm:py-20 lg:px-8"
     >
-      {/* Ambient blobs */}
+      {/* Background Ambient Lights */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -left-40 top-20 -z-10 h-100 w-100 rounded-full bg-cyber-cyan/15 blur-[180px]"
+        className="pointer-events-none absolute -right-40 top-0 -z-10 h-120 w-120 rounded-full bg-cyber-purple/10 blur-[150px]"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-40 bottom-0 -z-10 h-105 w-105 rounded-full bg-cyber-purple/15 blur-[200px]"
+        className="pointer-events-none absolute -bottom-40 -left-40 -z-10 h-120 w-120 rounded-full bg-cyber-cyan/8 blur-[150px]"
       />
 
       <div className="mx-auto max-w-7xl">
-        {/* Heading */}
+        
+        {/* 👇 ADDED HEADING HERE 👇 */}
         <div className="mb-12 max-w-3xl">
           <motion.p
             initial={{ opacity: 0, y: 8 }}
@@ -134,8 +135,7 @@ export default function ContactSection() {
             transition={{ duration: 0.5 }}
             className="mb-4 inline-flex items-center space-x-2 rounded-full glass-panel border border-cyber-cyan/30 px-3 py-1 font-mono text-xs uppercase tracking-widest text-cyber-cyan"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-cyber-cyan animate-pulse" />
-            <span>// get in touch</span>
+            <span>[ get in touch ]</span>
           </motion.p>
 
           <motion.h2
@@ -149,64 +149,51 @@ export default function ContactSection() {
             Let's Build Something{" "}
             <span className="neon-text-gradient">Together</span>
           </motion.h2>
-
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-gray-400"
-          >
-            Say something to start a live chat — we usually reply within a
-            business day.
-          </motion.p>
         </div>
 
-        {/* Two-column layout */}
-        <div className="grid gap-8 pt-12 sm:pt-20 lg:grid-cols-2 lg:gap-16 lg:pt-44">
-          {/* ============ LEFT: Card with photo ============ */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ type: "spring", stiffness: 60, damping: 18 }}
-            className="relative"
-          >
-            {/* 
-              Instead of relying on absolute positioning which causes overlap on mobile, 
-              we use CSS Grid inside the card. The text takes the left column (1fr), 
-              and the photo takes the right column (auto).
-            */}
-            <div className="glass-panel relative z-10 grid grid-cols-[1fr_auto] items-end rounded-2xl border border-cyber-cyan/20 p-6 sm:p-8 lg:p-10">
-              
-              {/* Left side: Text & Socials */}
-              <div className="flex flex-col justify-between">
-                <div>
-                  <h3 className="font-display text-2xl font-bold text-white sm:text-3xl">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ type: "spring", stiffness: 60, damping: 18 }}
+          className="relative mx-auto w-full overflow-hidden rounded-3xl border border-white/10 bg-[#080d1b]/90 shadow-[0_28px_90px_rgba(0,0,0,0.45)] backdrop-blur-2xl"
+        >
+          <div className="grid lg:grid-cols-[minmax(350px,0.82fr)_minmax(0,1.18fr)]">
+            <aside className="relative isolate flex min-h-[540px] flex-col overflow-hidden border-b border-white/10 bg-gradient-to-br from-[#0c1221] via-[#080d19] to-[#050812] p-6 sm:p-8 lg:min-h-[590px] lg:border-b-0 lg:border-r lg:p-10">
+              <div className="z-20 lg:contents">
+                <div className="relative z-20 max-w-[72%] lg:max-w-[68%]">
+                  <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.2em] text-cyber-cyan">
+                    Get in touch
+                  </p>
+                  <h2 className="font-display text-2xl font-bold leading-tight tracking-tight text-white lg:text-xl xl:text-2xl">
                     Contact Information
-                  </h3>
-                  <p className="mt-2 text-sm text-gray-400">
-                    Say something to start a live chat!
+                  </h2>
+                  <p className="mt-2 text-sm leading-6 text-gray-400">
+                    Say something to start a live chat.
                   </p>
 
-                  <ul className="mt-8 space-y-6">
+                  <ul className="mt-6 space-y-4">
                     {CONTACT.map((item) => {
                       const Icon = item.icon;
                       const inner = (
-                        <span className="flex items-start gap-3 sm:gap-4">
-                          <Icon className="mt-0.5 h-4 w-4 shrink-0 text-cyber-cyan sm:h-5 sm:w-5" />
-                          <span className="text-xs leading-relaxed text-gray-300 sm:text-sm">
-                            {item.label}
+                        <span className="flex items-center gap-3">
+                          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-cyber-cyan transition-colors group-hover:border-cyber-cyan/30 group-hover:bg-cyber-cyan/10">
+                            <Icon className="h-4 w-4" aria-hidden="true" />
+                          </span>
+                          <span className="min-w-0">
+                            <span className="block text-[10px] font-semibold uppercase tracking-[0.16em] text-gray-500">
+                              {item.icon === Phone ? "Phone" : item.icon === Mail ? "Email" : "Address"}
+                            </span>
+                            <span className="mt-1 block break-words text-sm leading-5 text-gray-200">
+                              {item.label}
+                            </span>
                           </span>
                         </span>
                       );
                       return (
                         <li key={item.label}>
                           {item.href ? (
-                            <a
-                              href={item.href}
-                              className="block transition-colors hover:text-cyber-cyan"
-                            >
+                            <a href={item.href} className="group block w-fit max-w-full transition-opacity hover:opacity-80">
                               {inner}
                             </a>
                           ) : (
@@ -218,134 +205,122 @@ export default function ContactSection() {
                   </ul>
                 </div>
 
-                {/* Socials */}
-                <div className="mt-8 flex flex-wrap items-center gap-3 sm:mt-10 sm:gap-4">
-                  {SOCIALS.map((s) => (
-                    <a
-                      key={s.label}
-                      href={s.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={s.label}
-                      className="flex h-8 w-8 items-center justify-center rounded-full border border-cyber-purple/30 bg-cyber-purple/5 text-cyber-purple transition-all hover:border-cyber-purple/70 hover:bg-cyber-purple/15 hover:shadow-[0_0_15px_rgba(168,85,247,0.4)] sm:h-9 sm:w-9"
-                    >
-                      <svg
-                        viewBox="0 0 24 24"
-                        className="h-3.5 w-3.5 fill-current sm:h-4 sm:w-4"
-                        aria-hidden="true"
-                      >
-                        <path d={s.path} />
-                      </svg>
-                    </a>
-                  ))}
+                <div className="absolute inset-y-0 right-0 flex w-[42%] items-end justify-end lg:w-[36%]">
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute bottom-8 right-0 h-48 w-48 rounded-full bg-cyber-purple/10 blur-[70px]"
+                  />
+                  <img
+                    src={ownerImage}
+                    alt="Nevas AI founder"
+                    className="pointer-events-none z-10 h-[220px] w-auto max-w-full object-contain object-bottom drop-shadow-[0_0_32px_rgba(168,85,247,0.22)] lg:h-[76%]"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </div>
+
               </div>
 
-              {/* Right side: Photo */}
-              <div className="relative -mb-6 flex max-w-[140px] justify-end sm:-mb-8 sm:max-w-[180px] lg:-mb-10 lg:max-w-[220px]">
-                <img
-                  src={ownerImage}
-                  alt="Nevas AI founder"
-                  className="w-full object-contain object-bottom drop-shadow-[0_0_30px_rgba(168,85,247,0.15)]"
-                  loading="lazy"
-                  decoding="async"
-                />
+              <div className="relative z-20 mt-auto flex gap-3 pt-8">
+                {SOCIALS.map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-gray-400 transition-colors hover:border-cyber-purple/50 hover:bg-cyber-purple/10 hover:text-cyber-purple"
+                  >
+                    <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
+                      <path d={s.path} />
+                    </svg>
+                  </a>
+                ))}
+              </div>
+            </aside>
+
+            <div className="flex flex-col p-6 sm:p-8 lg:p-10">
+              <div className="mb-7 border-b border-white/[0.08] pb-5">
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-cyber-purple">
+                  Start a conversation
+                </p>
+                <h3 className="mt-2 font-display text-2xl font-bold leading-tight tracking-tight text-white sm:text-3xl">
+                  Send us a message
+                </h3>
+                <p className="mt-2 text-sm text-gray-400">
+                  Tell us about your project and we’ll be in touch.
+                </p>
               </div>
 
+              <form onSubmit={handleSubmit} className="flex flex-1 flex-col">
+                <div className="space-y-5">
+                  <div className="grid gap-5 sm:grid-cols-2">
+                    <Field
+                      label="First Name"
+                      value={form.firstName}
+                      onChange={(v) => update("firstName", v)}
+                      required
+                    />
+                    <Field
+                      label="Last Name"
+                      value={form.lastName}
+                      onChange={(v) => update("lastName", v)}
+                    />
+                  </div>
+
+                  <div className="grid gap-5 sm:grid-cols-2">
+                    <Field
+                      label="Email Address"
+                      type="email"
+                      value={form.email}
+                      onChange={(v) => update("email", v)}
+                      required
+                    />
+                    <Field
+                      label="Phone Number"
+                      type="tel"
+                      value={form.phone}
+                      onChange={(v) => update("phone", v)}
+                    />
+                  </div>
+
+                  <Field
+                    label="How can we help you?"
+                    value={form.message}
+                    onChange={(v) => update("message", v)}
+                    textarea
+                    required
+                  />
+                </div>
+
+                <div className="mt-7 flex flex-col-reverse items-start justify-between gap-4 border-t border-white/[0.08] pt-5 sm:flex-row sm:items-center">
+                  <div aria-live="polite" className="min-h-5 font-mono text-xs">
+                    {status === "sending" && <span className="text-gray-400">// Sending…</span>}
+                    {status === "sent" && <span className="text-cyber-cyan">// Message sent — we'll be in touch</span>}
+                    {status === "error" && <span className="text-cyber-pink">// Something went wrong. Try again.</span>}
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={status === "sending"}
+                    className="hud-book-btn hud-book-btn--purple group inline-flex items-center gap-2 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    <span>{status === "sending" ? "Sending…" : "Send Message"}</span>
+                    <ArrowRight className="h-4 w-4 text-cyber-purple transition-transform group-hover:translate-x-1" />
+                  </button>
+                </div>
+              </form>
             </div>
-          </motion.div>
 
-          {/* ============ RIGHT: Form ============ */}
-          <motion.form
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{
-              type: "spring",
-              stiffness: 60,
-              damping: 18,
-              delay: 0.15,
-            }}
-            onSubmit={handleSubmit}
-            className="flex flex-col justify-between lg:pt-0"
-          >
-            <div className="space-y-8">
-              <div className="grid gap-8 sm:grid-cols-2">
-                <Field
-                  label="First Name"
-                  value={form.firstName}
-                  onChange={(v) => update("firstName", v)}
-                  required
-                />
-                <Field
-                  label="Last Name"
-                  value={form.lastName}
-                  onChange={(v) => update("lastName", v)}
-                />
-              </div>
-
-              <div className="grid gap-8 sm:grid-cols-2">
-                <Field
-                  label="Email"
-                  type="email"
-                  value={form.email}
-                  onChange={(v) => update("email", v)}
-                  required
-                />
-                <Field
-                  label="Phone"
-                  type="tel"
-                  value={form.phone}
-                  onChange={(v) => update("phone", v)}
-                />
-              </div>
-
-              <Field
-                label="Message"
-                value={form.message}
-                onChange={(v) => update("message", v)}
-                textarea
-                required
-              />
-            </div>
-
-            <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="font-mono text-xs">
-                {status === "sending" && (
-                  <span className="text-gray-400">// Sending…</span>
-                )}
-                {status === "sent" && (
-                  <span className="text-cyber-purple">
-                    // Message sent — we'll be in touch
-                  </span>
-                )}
-                {status === "error" && (
-                  <span className="text-cyber-pink">
-                    // Something went wrong. Try again.
-                  </span>
-                )}
-              </div>
-
-              <button
-                type="submit"
-                disabled={status === "sending"}
-                className="hud-book-btn hud-book-btn--purple group inline-flex items-center gap-2 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                <span>
-                  {status === "sending" ? "Sending…" : "Send Message"}
-                </span>
-                <Send className="h-4 w-4 text-cyber-purple transition-transform group-hover:translate-x-1" />
-              </button>
-            </div>
-          </motion.form>
-        </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* Field                                                               */
+/* Enhanced Form Field                                                 */
 /* ------------------------------------------------------------------ */
 
 type FieldProps = {
@@ -366,23 +341,25 @@ function Field({
   textarea,
 }: FieldProps) {
   const baseClasses = [
-    "w-full bg-transparent border-0 border-b border-gray-700",
-    "focus:border-cyber-purple focus:outline-none focus:ring-0",
-    "text-white placeholder:text-gray-500",
-    "pb-3 pt-2 text-sm transition-colors duration-300",
+    "w-full rounded-xl border border-white/10 bg-[#050914]/80 px-4 py-3.5",
+    "text-sm text-white placeholder:text-gray-500",
+    "transition-colors duration-200",
+    "focus:border-cyber-purple/70 focus:outline-none focus:ring-2 focus:ring-cyber-purple/20",
     "font-sans",
   ].join(" ");
 
   return (
     <label className="block">
-      <span className="sr-only">{label}</span>
+      <span className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-400">
+        {label} {required && <span className="text-cyber-purple">*</span>}
+      </span>
       {textarea ? (
         <textarea
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder={label}
+          placeholder="Tell us about your project..."
           required={required}
-          rows={2}
+          rows={4}
           className={`${baseClasses} resize-none`}
         />
       ) : (
@@ -390,7 +367,7 @@ function Field({
           type={type}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder={label}
+          placeholder={`Enter your ${label.toLowerCase()}`}
           required={required}
           className={baseClasses}
         />

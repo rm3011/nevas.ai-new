@@ -341,14 +341,20 @@ function PanelHeader() {
 export default function Services() {
 	const [activeId, setActiveId] = useState<string>(SERVICES[0].id);
 	const buttonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+	const initialActiveId = useRef(activeId);
 
 	const active = SERVICES.find((s) => s.id === activeId) ?? SERVICES[0];
 
 	useEffect(() => {
-		buttonRefs.current[activeId]?.scrollIntoView({
-			block: "nearest",
-			behavior: "smooth",
-		});
+		if (
+			activeId !== initialActiveId.current &&
+			document.readyState === "complete"
+		) {
+			buttonRefs.current[activeId]?.scrollIntoView({
+				block: "nearest",
+				behavior: "smooth",
+			});
+		}
 	}, [activeId]);
 
 	return (

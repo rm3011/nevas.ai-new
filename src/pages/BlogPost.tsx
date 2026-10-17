@@ -37,7 +37,7 @@ export default function BlogPost() {
         {!loading && !error && !post && (
           <div className="glass-panel rounded-2xl p-12 text-center">
             <p className="font-mono text-sm text-gray-500">
-              // Article not found.
+              [ Article not found. ]
             </p>
           </div>
         )}
@@ -52,8 +52,7 @@ export default function BlogPost() {
                 transition={{ duration: 0.5 }}
                 className="mb-4 inline-flex items-center gap-2 rounded-full glass-panel border border-cyber-cyan/30 px-3 py-1 font-mono text-xs uppercase tracking-widest text-cyber-cyan"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-cyber-cyan animate-pulse" />
-                <span>// article</span>
+                <span>[ article ]</span>
               </motion.p>
 
               <motion.h1

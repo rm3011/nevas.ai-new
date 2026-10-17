@@ -89,8 +89,8 @@ function PlayBadge({ size = "md" }: { size?: "sm" | "md" }) {
 /* ------------------------------------------------------------------ */
 
 export default function YoutubeVideos() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const active = SHORTS[activeIndex];
+  // Default to the first video so mobile has something to play immediately
+  const [activeId, setActiveId] = useState<string>(SHORTS[0].id);
 
   return (
     <section
@@ -150,10 +150,11 @@ export default function YoutubeVideos() {
         {/* ============================================================= */}
         <div className="md:hidden">
           <div className="relative mx-auto aspect-9/16 w-full max-w-sm overflow-hidden rounded-2xl border border-cyber-purple/40 bg-cyber-card shadow-[0_0_40px_rgba(168,85,247,0.2)]">
+            {/* Render the iframe based on activeId */}
             <iframe
-              key={active.id}
-              src={`https://www.youtube.com/embed/${active.id}?autoplay=1&mute=1&rel=0&loop=1&playlist=${active.id}`}
-              title={active.title}
+              key={activeId} // Forces reload when switching thumbnails
+              src={`https://www.youtube.com/embed/${activeId}?autoplay=1&mute=1&rel=0&loop=1&playlist=${activeId}`}
+              title="YouTube Short"
               allow="autoplay; encrypted-media; picture-in-picture"
               allowFullScreen
               loading="lazy"
@@ -163,12 +164,12 @@ export default function YoutubeVideos() {
 
           {/* Thumbnail strip below */}
           <div className="mt-4 flex gap-2 overflow-x-auto pb-2 scrollbar-none [&::-webkit-scrollbar]:hidden">
-            {SHORTS.map((short, index) => {
-              const isActive = index === activeIndex;
+            {SHORTS.map((short) => {
+              const isActive = short.id === activeId;
               return (
                 <button
                   key={short.id}
-                  onClick={() => setActiveIndex(index)}
+                  onClick={() => setActiveId(short.id)}
                   aria-label={`Play: ${short.title}`}
                   className={[
                     "group relative aspect-9/16 w-20 shrink-0 cursor-pointer overflow-hidden rounded-xl border transition-all duration-300 sm:w-24",
@@ -196,14 +197,14 @@ export default function YoutubeVideos() {
         {/* ============================================================= */}
         <div
           className="hidden h-130 w-full items-stretch gap-4 md:flex"
-          onMouseLeave={() => setActiveIndex(0)}
+          onMouseLeave={() => setActiveId(SHORTS[0].id)} // Reset to first video on mouse leave
         >
-          {SHORTS.map((short, index) => {
-            const isActive = index === activeIndex;
+          {SHORTS.map((short) => {
+            const isActive = short.id === activeId;
             return (
               <motion.div
                 key={short.id}
-                onMouseEnter={() => setActiveIndex(index)}
+                onMouseEnter={() => setActiveId(short.id)}
                 className={[
                   "group relative cursor-pointer overflow-hidden rounded-2xl border bg-cyber-card",
                   isActive
@@ -223,11 +224,6 @@ export default function YoutubeVideos() {
                 }}
                 style={{ flexShrink: 0 }}
               >
-                {/* 
-                  PERFORMANCE FIX: Instead of rendering 5 iframes in the background,
-                  we only render the iframe for the active video. The rest are just 
-                  optimized images.
-                */}
                 {isActive ? (
                   <iframe
                     key={short.id}
