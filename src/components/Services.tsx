@@ -146,6 +146,22 @@ const SERVICES: Service[] = [
 ];
 
 /* ------------------------------------------------------------------ */
+/* Image map — replace with your own URLs or local paths               */
+/* ------------------------------------------------------------------ */
+
+const SERVICE_IMAGES: Record<string, string> = {
+	consulting: "https://tse1.mm.bing.net/th/id/OIP.mfruj0s9L5G7bxNX_TznZAHaEO?r=0&w=1792&h=1024&rs=1&pid=ImgDetMain&o=7&rm=3",
+	"custom-ml": "https://consulting.groyyo.com/wp-content/uploads/2024/09/Picture1-scaled.jpg",
+	"generative-ai": "https://tse2.mm.bing.net/th/id/OIP.VIfMArpYJKk8j-AUK_YyRgHaEO?r=0&w=1344&h=768&rs=1&pid=ImgDetMain&o=7&rm=3",
+	"conversational-ai": "https://www.textilesresources.com/wp-content/uploads/2024/09/AI-is-enhancing-quality-control-in-textile-manufacturing-696x392.jpg",
+	"ai-app": "https://knowingfabric.com/wp-content/uploads/2024/07/textile_market_forecast_analysis.jpg",
+	"llm-tuning": "https://tse2.mm.bing.net/th/id/OIP.BTNMGmVfVHgGGjaG22I1vQHaEp?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+	"image-ai": "https://static.vecteezy.com/system/resources/previews/027/675/079/large_2x/futuristic-fashion-mannequin-in-the-store-ai-generative-free-photo.jpeg",
+	"ai-product": "https://tse4.mm.bing.net/th/id/OIP.cnegVSZDwUXuttxQvyV5wQHaEC?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+	aiops: "https://eonsr.com/wp-content/uploads/2026/02/are-ai-fashion-design-tools-revolutionizing-the-apparel-industry-featured-image.png",
+};
+
+/* ------------------------------------------------------------------ */
 /* Constants                                                           */
 /* ------------------------------------------------------------------ */
 
@@ -460,7 +476,19 @@ export default function Services() {
 										{active.title}
 									</h3>
 
-									<p className="mt-5 max-w-3xl font-cervino text-sm leading-7 text-gray-400 sm:text-base">
+									{/* Landscape image between title and description */}
+									<div className="relative mt-6 mb-6 overflow-hidden rounded-xl border border-cyan-400/15">
+										<img
+											src={SERVICE_IMAGES[active.id]}
+											alt={active.title}
+											className="h-48 w-full object-cover sm:h-56 lg:h-64"
+											loading="lazy"
+										/>
+										<div className="pointer-events-none absolute inset-0 bg-linear-to-t from-[#0B1220]/80 via-transparent to-transparent" />
+										<div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-cyan-400/50 to-transparent" />
+									</div>
+
+									<p className="max-w-3xl font-cervino text-sm leading-7 text-gray-400 sm:text-base">
 										{active.description}
 									</p>
 								</div>
@@ -473,4 +501,4 @@ export default function Services() {
 			</div>
 		</section>
 	);
-}	
+}

@@ -1,9 +1,23 @@
 import { ArrowRight, Sliders } from "lucide-react";
 
+const BANNER_IMAGE =
+  "https://img.freepik.com/premium-photo/vibrant-textile-mill-with-rows-looms-weaving-fabrics_980928-27124.jpg?w=2000";
+
 export default function Hero() {
   return (
-    <section className="relative z-10 pt-28 pb-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-5xl mx-auto text-center space-y-8">
+    <section className="relative z-10 pt-28 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      {/* Banner image background */}
+      <div className="absolute inset-0 -z-10">
+        <img
+          src={BANNER_IMAGE}
+          alt=""
+          aria-hidden="true"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-cyber-bg/50" />
+      </div>
+
+      <div className="relative max-w-5xl mx-auto text-center space-y-8">
         <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white leading-[1.12]">
           Powering The Future Of <br className="hidden sm:inline" />
           <span className="neon-text-gradient">Fashion With AI</span> &amp;{" "}

@@ -7,20 +7,10 @@ import {
   type Variants,
 } from "motion/react";
 
-const images = [
-  {
-    src: "https://tld-apparel.com/wp-content/uploads/2025/05/benefit-of-AI-in-the-garment-manufacturing-industry.jpg",
-    alt: "NEVAS AI",
-  },
-  {
-    src: "https://glance-web.glance-cdn.com/stunning_atmospheric_3d_virtual_dressing_room_generative_ai_6_e115383f33.jpg",
-    alt: "Fashion Tech",
-  },
-  {
-    src: "https://tld-apparel.com/wp-content/uploads/2025/01/garment-manufacturing-industry-1.jpg",
-    alt: "Intelligent Automation",
-  },
-];
+const image = {
+  src: "https://textalks.com/wp-content/uploads/2026/01/AI-copy.jpg",
+  alt: "NEVAS AI",
+};
 
 const stats = [
   { value: "50+", label: "BRANDS SCALED", color: "text-cyber-cyan" },
@@ -54,7 +44,7 @@ const stagger: Variants = {
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
 
-  // Parallax: images drift slower than the page as you scroll
+  // Parallax: image drifts slower than the page as you scroll
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
@@ -91,7 +81,7 @@ export default function About() {
             variants={floatIn}
             className="inline-flex items-center space-x-2 px-3 py-1 rounded-full glass-panel border border-cyber-cyan/30"
           >
-            <span className="text-xs font-mono tracking-widest text-cyber-cyan uppercase">
+            <span className="text-xs tracking-widest text-cyber-cyan uppercase">
               [ WHO WE ARE ]
             </span>
           </motion.div>
@@ -152,10 +142,10 @@ export default function About() {
                     damping: 16,
                   }}
                 >
-                  <div className={`text-2xl font-bold font-mono ${s.color}`}>
+                  <div className={`text-4xl sm:text-5xl font-bold ${s.color}`}>
                     {s.value}
                   </div>
-                  <div className="text-xs text-gray-500 font-mono mt-1">
+                  <div className="text-xs text-gray-500 mt-2">
                     {s.label}
                   </div>
                 </motion.div>
@@ -163,12 +153,10 @@ export default function About() {
             </div>
           </motion.div>
 
-          {/* Right Column: Image Grid */}
+          {/* Right Column: Single Large Image */}
           <motion.div
             style={{ y: imageY }}
-            className="grid grid-cols-2 gap-4"
           >
-            {/* Large Image */}
             <motion.div
               initial={{ opacity: 0, y: 60, scale: 0.95 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -180,44 +168,17 @@ export default function About() {
                 delay: 0.1,
               }}
               whileHover={{ y: -6, transition: { duration: 0.3 } }}
-              className="col-span-2 glass-panel p-2 rounded-2xl border border-cyber-cyan/20 overflow-hidden group"
+              className="glass-panel p-2 rounded-2xl border border-cyber-cyan/20 overflow-hidden group"
             >
               <div className="relative overflow-hidden rounded-xl">
                 <img
-                  src={images[0].src}
-                  alt={images[0].alt}
-                  className="w-full h-64 object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                  src={image.src}
+                  alt={image.alt}
+                  className="w-full h-[28rem] lg:h-[36rem] object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-cyber-bg/80 to-transparent pointer-events-none" />
               </div>
             </motion.div>
-
-            {/* Two Smaller Images */}
-            {images.slice(1).map((img, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 40, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{
-                  type: "spring",
-                  stiffness: 55,
-                  damping: 18,
-                  delay: 0.25 + idx * 0.15,
-                }}
-                whileHover={{ y: -6, transition: { duration: 0.3 } }}
-                className="glass-panel p-2 rounded-2xl border border-cyber-purple/20 overflow-hidden group"
-              >
-                <div className="relative overflow-hidden rounded-xl">
-                  <img
-                    src={img.src}
-                    alt={img.alt}
-                    className="w-full h-40 object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
-                  />
-                  <div className="absolute inset-0 bg-linear-to-t from-cyber-bg/80 to-transparent pointer-events-none" />
-                </div>
-              </motion.div>
-            ))}
           </motion.div>
         </div>
       </div>
