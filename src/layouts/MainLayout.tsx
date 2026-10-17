@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 const ParticleCanvas = lazy(() => import("../components/ParticleCanvas"));
 
 export default function MainLayout() {
+
   return (
     <>
       <Suspense fallback={null}>
