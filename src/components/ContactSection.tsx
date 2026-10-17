@@ -134,7 +134,8 @@ export default function ContactSection() {
             transition={{ duration: 0.5 }}
             className="mb-4 inline-flex items-center space-x-2 rounded-full glass-panel border border-cyber-cyan/30 px-3 py-1 font-mono text-xs uppercase tracking-widest text-cyber-cyan"
           >
-            <span>[ get in touch ]</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-cyber-cyan animate-pulse" />
+            <span>// get in touch</span>
           </motion.p>
 
           <motion.h2
@@ -162,7 +163,7 @@ export default function ContactSection() {
         </div>
 
         {/* Two-column layout */}
-        <div className="grid gap-8 pt-32 sm:pt-40 lg:grid-cols-2 lg:gap-16 lg:pt-44">
+        <div className="grid gap-8 pt-12 sm:pt-20 lg:grid-cols-2 lg:gap-16 lg:pt-44">
           {/* ============ LEFT: Card with photo ============ */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -171,73 +172,86 @@ export default function ContactSection() {
             transition={{ type: "spring", stiffness: 60, damping: 18 }}
             className="relative"
           >
-            {/* Photo */}
-            <img
-              src={ownerImage}
-              alt="Nevas AI founder"
-              className="pointer-events-none absolute bottom-0 right-2 z-20 h-105 w-auto object-contain object-bottom drop-shadow-[0_0_30px_rgba(168,85,247,0.15)] sm:h-125 sm:right-4 lg:h-140 lg:-right-6"
-              loading="lazy"
-              decoding="async"
-            />
+            {/* 
+              Instead of relying on absolute positioning which causes overlap on mobile, 
+              we use CSS Grid inside the card. The text takes the left column (1fr), 
+              and the photo takes the right column (auto).
+            */}
+            <div className="glass-panel relative z-10 grid grid-cols-[1fr_auto] items-end rounded-2xl border border-cyber-cyan/20 p-6 sm:p-8 lg:p-10">
+              
+              {/* Left side: Text & Socials */}
+              <div className="flex flex-col justify-between">
+                <div>
+                  <h3 className="font-display text-2xl font-bold text-white sm:text-3xl">
+                    Contact Information
+                  </h3>
+                  <p className="mt-2 text-sm text-gray-400">
+                    Say something to start a live chat!
+                  </p>
 
-            {/* Card */}
-            <div className="glass-panel relative z-10 mr-20 overflow-hidden rounded-2xl border border-cyber-cyan/20 p-8 sm:mr-28 sm:p-10 lg:mr-0 lg:pr-60">
-              <h3 className="font-display text-2xl font-bold text-white sm:text-3xl">
-                Contact Information
-              </h3>
-              <p className="mt-2 text-sm text-gray-400">
-                Say something to start a live chat!
-              </p>
+                  <ul className="mt-8 space-y-6">
+                    {CONTACT.map((item) => {
+                      const Icon = item.icon;
+                      const inner = (
+                        <span className="flex items-start gap-3 sm:gap-4">
+                          <Icon className="mt-0.5 h-4 w-4 shrink-0 text-cyber-cyan sm:h-5 sm:w-5" />
+                          <span className="text-xs leading-relaxed text-gray-300 sm:text-sm">
+                            {item.label}
+                          </span>
+                        </span>
+                      );
+                      return (
+                        <li key={item.label}>
+                          {item.href ? (
+                            <a
+                              href={item.href}
+                              className="block transition-colors hover:text-cyber-cyan"
+                            >
+                              {inner}
+                            </a>
+                          ) : (
+                            inner
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
 
-              <ul className="mt-8 space-y-6">
-                {CONTACT.map((item) => {
-                  const Icon = item.icon;
-                  const inner = (
-                    <span className="flex items-start gap-4">
-                      <Icon className="mt-0.5 h-5 w-5 shrink-0 text-cyber-cyan" />
-                      <span className="text-sm leading-relaxed text-gray-300">
-                        {item.label}
-                      </span>
-                    </span>
-                  );
-                  return (
-                    <li key={item.label}>
-                      {item.href ? (
-                        <a
-                          href={item.href}
-                          className="block transition-colors hover:text-cyber-cyan"
-                        >
-                          {inner}
-                        </a>
-                      ) : (
-                        inner
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-
-              {/* Socials */}
-              <div className="mt-10 flex items-center gap-4">
-                {SOCIALS.map((s) => (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={s.label}
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-cyber-purple/30 bg-cyber-purple/5 text-cyber-purple transition-all hover:border-cyber-purple/70 hover:bg-cyber-purple/15 hover:shadow-[0_0_15px_rgba(168,85,247,0.4)]"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      className="h-4 w-4 fill-current"
-                      aria-hidden="true"
+                {/* Socials */}
+                <div className="mt-8 flex flex-wrap items-center gap-3 sm:mt-10 sm:gap-4">
+                  {SOCIALS.map((s) => (
+                    <a
+                      key={s.label}
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={s.label}
+                      className="flex h-8 w-8 items-center justify-center rounded-full border border-cyber-purple/30 bg-cyber-purple/5 text-cyber-purple transition-all hover:border-cyber-purple/70 hover:bg-cyber-purple/15 hover:shadow-[0_0_15px_rgba(168,85,247,0.4)] sm:h-9 sm:w-9"
                     >
-                      <path d={s.path} />
-                    </svg>
-                  </a>
-                ))}
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="h-3.5 w-3.5 fill-current sm:h-4 sm:w-4"
+                        aria-hidden="true"
+                      >
+                        <path d={s.path} />
+                      </svg>
+                    </a>
+                  ))}
+                </div>
               </div>
+
+              {/* Right side: Photo */}
+              <div className="relative -mb-6 flex max-w-[140px] justify-end sm:-mb-8 sm:max-w-[180px] lg:-mb-10 lg:max-w-[220px]">
+                <img
+                  src={ownerImage}
+                  alt="Nevas AI founder"
+                  className="w-full object-contain object-bottom drop-shadow-[0_0_30px_rgba(168,85,247,0.15)]"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+
             </div>
           </motion.div>
 
@@ -253,7 +267,7 @@ export default function ContactSection() {
               delay: 0.15,
             }}
             onSubmit={handleSubmit}
-            className="flex flex-col justify-between"
+            className="flex flex-col justify-between lg:pt-0"
           >
             <div className="space-y-8">
               <div className="grid gap-8 sm:grid-cols-2">
