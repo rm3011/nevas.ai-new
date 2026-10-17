@@ -32,8 +32,7 @@ export default function BlogSection() {
             transition={{ duration: 0.5 }}
             className="mb-4 inline-flex items-center space-x-2 rounded-full glass-panel border border-cyber-cyan/30 px-3 py-1 font-mono text-xs uppercase tracking-widest text-cyber-cyan"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-cyber-cyan animate-pulse" />
-            <span>// insights & ideas</span>
+            <span>[ insights & ideas ]</span>
           </motion.p>
 
           <motion.h2

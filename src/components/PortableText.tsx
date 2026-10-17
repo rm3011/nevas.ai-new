@@ -18,11 +18,50 @@ function Block({ block }: { block: BlogBodyBlock }) {
   switch (block._type) {
     case "image":
       return <ImageBlock block={block} />;
+      
+    case "youtube":
+      return <YoutubeBlock block={block} />;
 
     case "block":
     default:
       return <TextBlock block={block} />;
   }
+}
+
+/* ------------------------------------------------------------------ */
+/* YouTube block                                                       */
+/* ------------------------------------------------------------------ */
+
+function getYouTubeId(url?: string) {
+  if (!url) return null;
+  // Matches: youtu.be/ID, youtube.com/watch?v=ID, youtube.com/shorts/ID, etc.
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : null;
+}
+
+function YoutubeBlock({ block }: { block: BlogBodyBlock }) {
+  const videoId = getYouTubeId(block.url);
+  if (!videoId) return null;
+
+  return (
+    <figure className="my-10">
+      <div className="relative aspect-video overflow-hidden rounded-2xl border border-cyber-purple/20 bg-cyber-card shadow-[0_0_30px_rgba(168,85,247,0.15)]">
+        <iframe
+          src={`https://www.youtube.com/embed/${videoId}?rel=0`}
+          title={block.title || "YouTube video"}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className="absolute inset-0 h-full w-full border-0"
+        />
+      </div>
+      {block.title && (
+        <figcaption className="mt-3 text-center font-mono text-xs uppercase tracking-widest text-gray-500">
+          {block.title}
+        </figcaption>
+      )}
+    </figure>
+  );
 }
 
 /* ------------------------------------------------------------------ */
@@ -34,7 +73,7 @@ function TextBlock({ block }: { block: BlogBodyBlock }) {
 
   if (block.listItem === "bullet") {
     return (
-      <ul className="list-disc space-y-2 pl-6 text-base leading-relaxed text-gray-300 marker:text-cyber-cyan">
+      <ul className="list-disc space-y-2 pl-6 text-base leading-relaxed text-gray-300 marker:text-cyber-purple">
         <li>{children}</li>
       </ul>
     );
@@ -42,7 +81,7 @@ function TextBlock({ block }: { block: BlogBodyBlock }) {
 
   if (block.listItem === "number") {
     return (
-      <ol className="list-decimal space-y-2 pl-6 text-base leading-relaxed text-gray-300 marker:text-cyber-cyan">
+      <ol className="list-decimal space-y-2 pl-6 text-base leading-relaxed text-gray-300 marker:text-cyber-purple">
         <li>{children}</li>
       </ol>
     );
@@ -75,7 +114,7 @@ function TextBlock({ block }: { block: BlogBodyBlock }) {
       );
     case "blockquote":
       return (
-        <blockquote className="border-l-2 border-cyber-cyan/50 pl-6 text-lg italic leading-relaxed text-gray-300">
+        <blockquote className="border-l-2 border-cyber-purple/50 pl-6 text-lg italic leading-relaxed text-gray-300">
           {children}
         </blockquote>
       );
@@ -101,7 +140,7 @@ function renderChildren(block: BlogBodyBlock) {
           node = (
             <code
               key={i}
-              className="rounded bg-cyber-card px-1.5 py-0.5 font-mono text-sm text-cyber-cyan"
+              className="rounded bg-cyber-card px-1.5 py-0.5 font-mono text-sm text-cyber-purple"
             >
               {node}
             </code>
@@ -119,7 +158,7 @@ function renderChildren(block: BlogBodyBlock) {
                 href={def.href}
                 target={isExternal ? "_blank" : undefined}
                 rel={isExternal ? "noopener noreferrer" : undefined}
-                className="text-cyber-cyan underline decoration-cyber-cyan/40 underline-offset-4 transition-colors hover:decoration-cyber-cyan"
+                className="text-cyber-purple underline decoration-cyber-purple/40 underline-offset-4 transition-colors hover:decoration-cyber-purple"
               >
                 {node}
               </a>
@@ -142,7 +181,7 @@ function ImageBlock({ block }: { block: BlogBodyBlock }) {
 
   return (
     <figure className="my-10">
-      <div className="overflow-hidden rounded-2xl border border-cyber-cyan/15">
+      <div className="overflow-hidden rounded-2xl border border-cyber-purple/20">
         <img
           src={`${block.imageUrl}?w=1200&auto=format`}
           alt={block.alt ?? ""}

@@ -20,7 +20,7 @@ const SHORTS: Short[] = [
     published: "2026-10-09",
   },
   {
-    id: "gm8bdMnfN2s",
+    id: "IhBs5_SGVu0",
     title: "AI for Merchandisers: Cut Order Follow-Up Time in Half",
     published: "2026-10-08",
   },
@@ -90,7 +90,6 @@ function PlayBadge({ size = "md" }: { size?: "sm" | "md" }) {
 
 export default function YoutubeVideos() {
   const [activeIndex, setActiveIndex] = useState(0);
-
   const active = SHORTS[activeIndex];
 
   return (
@@ -117,8 +116,7 @@ export default function YoutubeVideos() {
             transition={{ duration: 0.5 }}
             className="mb-4 inline-flex items-center space-x-2 rounded-full glass-panel border border-cyber-cyan/30 px-3 py-1 font-mono text-xs uppercase tracking-widest text-cyber-cyan"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-cyber-cyan animate-pulse" />
-            <span>// latest shorts</span>
+            <span>[ latest shorts ]</span>
           </motion.p>
 
           <motion.h2
@@ -158,6 +156,7 @@ export default function YoutubeVideos() {
               title={active.title}
               allow="autoplay; encrypted-media; picture-in-picture"
               allowFullScreen
+              loading="lazy"
               className="absolute inset-0 h-full w-full border-0"
             />
           </div>
@@ -183,6 +182,7 @@ export default function YoutubeVideos() {
                     alt=""
                     className="absolute inset-0 h-full w-full object-cover"
                     loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
                 </button>
@@ -223,8 +223,14 @@ export default function YoutubeVideos() {
                 }}
                 style={{ flexShrink: 0 }}
               >
+                {/* 
+                  PERFORMANCE FIX: Instead of rendering 5 iframes in the background,
+                  we only render the iframe for the active video. The rest are just 
+                  optimized images.
+                */}
                 {isActive ? (
                   <iframe
+                    key={short.id}
                     src={`https://www.youtube.com/embed/${short.id}?autoplay=1&mute=1&rel=0&loop=1&playlist=${short.id}`}
                     title={short.title}
                     allow="autoplay; encrypted-media; picture-in-picture"
@@ -238,6 +244,7 @@ export default function YoutubeVideos() {
                       alt={short.title}
                       className="absolute inset-0 h-full w-full object-cover opacity-70 transition-opacity duration-300 group-hover:opacity-100"
                       loading="lazy"
+                      decoding="async"
                     />
                     <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent" />
                     <PlayBadge size="md" />

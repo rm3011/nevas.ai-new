@@ -386,9 +386,9 @@ export default function Services() {
 						whileInView={{ opacity: 1, y: 0 }}
 						viewport={{ once: true, amount: 0.3 }}
 						transition={{ duration: 0.5 }}
-						className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-cyan-300"
+						className="mb-4 inline-flex items-center space-x-2 rounded-full glass-panel border border-cyber-cyan/30 px-3 py-1 font-mono text-xs uppercase tracking-widest text-cyber-cyan"
 					>
-						[ what we do ]
+						<span>[ what we do ]</span>
 					</motion.p>
 
 					<motion.h2

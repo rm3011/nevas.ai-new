@@ -50,7 +50,7 @@ export default function Navbar() {
             <img
               src="/logo.png"
               alt="Nevas AI"
-              className="h-12 sm:h-14 w-auto object-contain"
+              className="h-8 sm:h-10 w-auto object-contain"
             />
           </a>
 

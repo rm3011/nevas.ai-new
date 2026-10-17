@@ -29,6 +29,10 @@ export type BlogBodyBlock = {
   imageUrl?: string | null;
   alt?: string;
   caption?: string;
+  
+  // 👇 Added these two fields for the YouTube embed
+  url?: string;
+  title?: string;
 };
 
 export const RECENT_BLOG_POSTS_QUERY = `*[
@@ -72,6 +76,11 @@ export const BLOG_POST_BY_SLUG_QUERY = `*[
       alt,
       caption,
       "imageUrl": asset->url
+    },
+    _type == "youtube" => {
+      _type,
+      title,
+      url
     }
   }
 }`;

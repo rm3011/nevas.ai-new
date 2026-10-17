@@ -9,7 +9,7 @@ import {
 
 const images = [
   {
-    src: "https://glance-web.glance-cdn.com/115_fashion_show_featuring_holographic_outfits_models_strutting_down_runway_surrounded_by_futuristic_displays_captivated_audience_1_60cbe28835.jpg",
+    src: "https://tld-apparel.com/wp-content/uploads/2025/05/benefit-of-AI-in-the-garment-manufacturing-industry.jpg",
     alt: "NEVAS AI",
   },
   {
@@ -17,7 +17,7 @@ const images = [
     alt: "Fashion Tech",
   },
   {
-    src: "https://th.bing.com/th/id/OIP.eSSWLDaLaRUFxRHyLo-i-QHaEJ?w=321&h=181&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+    src: "https://tld-apparel.com/wp-content/uploads/2025/01/garment-manufacturing-industry-1.jpg",
     alt: "Intelligent Automation",
   },
 ];
@@ -91,9 +91,8 @@ export default function About() {
             variants={floatIn}
             className="inline-flex items-center space-x-2 px-3 py-1 rounded-full glass-panel border border-cyber-cyan/30"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-cyber-cyan animate-pulse" />
             <span className="text-xs font-mono tracking-widest text-cyber-cyan uppercase">
-              // WHO WE ARE
+              [ WHO WE ARE ]
             </span>
           </motion.div>
 

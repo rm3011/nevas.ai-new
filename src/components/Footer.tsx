@@ -89,7 +89,7 @@ export default function Footer() {
               <img
                 src="/logo.png"
                 alt="Nevas AI"
-                className="h-10 w-auto object-contain"
+                className="h-6 w-auto object-contain"
                 loading="lazy"
                 decoding="async"
               />
@@ -126,7 +126,7 @@ export default function Footer() {
           {/* Navigate column */}
           <div className="lg:col-span-2">
             <h4 className="mb-5 font-mono text-xs uppercase tracking-[0.25em] text-cyber-purple">
-              // Navigate
+             [ Navigate ]
             </h4>
             <ul className="space-y-3">
               {NAV_LINKS.map((l) =>
@@ -156,7 +156,7 @@ export default function Footer() {
           {/* Services column */}
           <div className="lg:col-span-3">
             <h4 className="mb-5 font-mono text-xs uppercase tracking-[0.25em] text-cyber-purple">
-              // Services
+              [ Services ]
             </h4>
             <ul className="space-y-3">
               {SERVICE_LINKS.map((label) => (
@@ -175,7 +175,7 @@ export default function Footer() {
           {/* Contact column */}
           <div className="lg:col-span-3">
             <h4 className="mb-5 font-mono text-xs uppercase tracking-[0.25em] text-cyber-purple">
-              // Contact
+              [ Contact ]
             </h4>
             <ul className="space-y-4">
               {CONTACT.map((item) => {
