@@ -1,5 +1,4 @@
 import { ArrowRight, Sliders } from "lucide-react";
-// 1. Import the video directly so Vite handles the path
 import heroVideo from "../assets/hero-banner-video.mp4";
 
 export default function Hero() {

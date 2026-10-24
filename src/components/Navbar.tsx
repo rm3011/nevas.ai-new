@@ -6,7 +6,9 @@ type NavLink = {
   label: string;
 };
 
-// Added the Videos link here, pointing to the #shorts ID
+// The URL to your PDF (put the PDF in the public folder)
+const BROCHURE_URL = "/nevas-brochure.pdf";
+
 const LINKS: NavLink[] = [
   { href: "/#about", label: "WHO WE ARE" },
   { href: "/#services", label: "WHAT WE DO" },
@@ -40,14 +42,41 @@ function DownloadButton({
   className?: string;
   onClick?: () => void;
 }) {
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault(); // Stop standard link navigation
+    
+    // Check if the user has unlocked the brochure via the form
+    const isUnlocked = localStorage.getItem("nevas_brochure_unlocked") === "true";
+
+    if (isUnlocked) {
+      // Trigger PDF download
+      const link = document.createElement("a");
+      link.href = BROCHURE_URL;
+      link.download = "Nevas_AI_Textile_Brochure.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      // Trigger the popup event
+      window.dispatchEvent(new Event("open-brochure-popup"));
+    }
+
+    if (onClick) onClick();
+  };
+
   return (
     <a
-      href="/#contact"
-      onClick={onClick}
-      className={`flex items-center justify-center gap-2 rounded-xl border border-cyber-cyan/30 bg-cyber-cyan/5 px-4 py-2 text-sm font-semibold text-cyber-cyan transition-all hover:bg-cyber-cyan/10 hover:shadow-[0_0_20px_rgba(0,240,255,0.2)] ${className}`}
+      href="#contact"
+      onClick={handleClick}
+      // Styled to match the HUD layout of the BookNow button, but with cyan accents
+      className={`hud-book-btn group !border-cyber-cyan/40 !bg-cyber-cyan/5 hover:!bg-cyber-cyan/10 ${className}`}
+      style={{
+         // Custom overrides to match the "Book Now" button frame
+         boxShadow: "0 0 20px rgba(0, 240, 255, 0.1), inset 0 0 10px rgba(0, 240, 255, 0.05)"
+      }}
     >
-      <Download className="w-4 h-4" />
-      <span>Brochure</span>
+      <Download className="w-4 h-4 text-cyber-cyan mr-2 transition-transform group-hover:-translate-y-0.5" />
+      <span className="text-cyber-cyan font-semibold">Brochure</span>
     </a>
   );
 }
@@ -80,7 +109,6 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* Added the Download button next to the Book Now button */}
           <div className="hidden sm:flex items-center gap-3">
             <DownloadButton />
             <BookNowButton />
@@ -112,11 +140,10 @@ export default function Navbar() {
             </a>
           ))}
           
-          {/* Stacked buttons for mobile */}
           <div className="pt-2 flex flex-col gap-3">
             <DownloadButton
               onClick={() => setMobileOpen(false)}
-              className="w-full py-3"
+              className="w-full py-3 justify-center"
             />
             <BookNowButton
               onClick={() => setMobileOpen(false)}

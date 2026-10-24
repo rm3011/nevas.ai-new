@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { Mail, MapPin, Phone, ArrowRight } from "lucide-react";
 import emailjs from "@emailjs/browser";
 import ownerImage from "../assets/owner-optimized.png";
+import { BROCHURE_URL } from "../utils/brochure";
 
 /* ------------------------------------------------------------------ */
 /* EmailJS config                                                      */
@@ -98,12 +99,24 @@ export default function ContactSection() {
         phone: "",
         message: "",
       });
+
+      localStorage.setItem("nevas_brochure_unlocked", "true");
+
+      const link = document.createElement("a");
+      link.href = BROCHURE_URL;
+      link.download = "nevas-brochure.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
       setTimeout(() => setStatus("idle"), 4000);
     } catch (err) {
       console.error("[contact] EmailJS error:", err);
       setStatus("error");
       setTimeout(() => setStatus("idle"), 4000);
     }
+
+    
   };
 
   return (

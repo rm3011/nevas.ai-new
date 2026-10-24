@@ -33,11 +33,12 @@ export default function Footer() {
       <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[300px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyber-purple/10 blur-[120px]" />
       <div className="pointer-events-none absolute bottom-0 right-0 -z-10 h-64 w-64 translate-x-1/3 translate-y-1/3 rounded-full bg-cyber-cyan/5 blur-[100px]" />
 
-      <div className="mx-auto flex max-w-7xl flex-col items-center px-4 py-16 sm:px-6 lg:px-8">
+      {/* Reduced outer padding from py-16 to py-8 sm:py-10 */}
+      <div className="mx-auto flex max-w-7xl flex-col items-center px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
         
         {/* Top: Brand & Tagline */}
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: "easeOut" }}
@@ -47,13 +48,15 @@ export default function Footer() {
             <img
               src="/logo.png"
               alt="Nevas AI"
-              className="h-8 w-auto object-contain transition-transform duration-500 group-hover:scale-105"
+              // Slightly reduced logo size
+              className="h-6 w-auto object-contain transition-transform duration-500 group-hover:scale-105"
               loading="lazy"
               decoding="async"
             />
           </Link>
 
-          <p className="mt-6 max-w-md text-sm leading-relaxed text-gray-400">
+          {/* Reduced top margin from mt-6 to mt-3 */}
+          <p className="mt-3 max-w-md text-xs leading-relaxed text-gray-400 sm:text-sm">
             Powering the future of fashion and manufacturing with AI-driven automation, intelligence, and scale.
           </p>
         </motion.div>
@@ -67,7 +70,8 @@ export default function Footer() {
             hidden: {},
             show: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
           }}
-          className="mt-8 flex items-center gap-4"
+          // Reduced top margin from mt-8 to mt-5
+          className="mt-5 flex items-center gap-3 sm:gap-4"
         >
           {SOCIALS.map((s) => (
             <motion.a
@@ -80,34 +84,35 @@ export default function Footer() {
                 hidden: { opacity: 0, y: 10 },
                 show: { opacity: 1, y: 0 }
               }}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.02] text-gray-400 transition-all duration-300 hover:-translate-y-1 hover:border-cyber-purple/50 hover:bg-cyber-purple/10 hover:text-cyber-purple hover:shadow-[0_0_20px_rgba(168,85,247,0.3)]"
+              // Slightly smaller social icons
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.02] text-gray-400 transition-all duration-300 hover:-translate-y-1 hover:border-cyber-purple/50 hover:bg-cyber-purple/10 hover:text-cyber-purple hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] sm:h-10 sm:w-10"
             >
-              <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
+              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-current sm:h-4 sm:w-4" aria-hidden="true">
                 <path d={s.path} />
               </svg>
             </motion.a>
           ))}
         </motion.div>
 
-        {/* Divider */}
-        <div className="my-10 h-px w-full max-w-3xl bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        {/* Divider - Reduced margins from my-10 to my-6 */}
+        <div className="my-6 h-px w-full max-w-3xl bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
         {/* Bottom Bar */}
-        <div className="flex w-full max-w-4xl flex-col items-center justify-between gap-4 sm:flex-row">
-          <p className="font-mono text-[11px] uppercase tracking-widest text-gray-500">
+        <div className="flex w-full max-w-4xl flex-col items-center justify-between gap-3 sm:flex-row">
+          <p className="font-mono text-[10px] uppercase tracking-widest text-gray-500 sm:text-[11px]">
             © {year} Nevas.ai Consulting. All rights reserved.
           </p>
 
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-6">
             <a
               href="#"
-              className="font-mono text-[11px] uppercase tracking-widest text-gray-500 transition-colors hover:text-cyber-purple"
+              className="font-mono text-[10px] uppercase tracking-widest text-gray-500 transition-colors hover:text-cyber-purple sm:text-[11px]"
             >
               Privacy
             </a>
             <a
               href="#"
-              className="font-mono text-[11px] uppercase tracking-widest text-gray-500 transition-colors hover:text-cyber-purple"
+              className="font-mono text-[10px] uppercase tracking-widest text-gray-500 transition-colors hover:text-cyber-purple sm:text-[11px]"
             >
               Terms
             </a>
