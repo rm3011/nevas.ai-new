@@ -2,6 +2,7 @@ import { Suspense, lazy } from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import BrochurePopup from "../components/BrochurePopup";
 
 const ParticleCanvas = lazy(() => import("../components/ParticleCanvas"));
 
@@ -15,6 +16,7 @@ export default function MainLayout() {
       <Navbar />
       <Outlet />
       <Footer />
+      <BrochurePopup />
     </>
   );
 }

@@ -1,20 +1,18 @@
 import { useState } from "react";
-import { ArrowRight, Menu, X } from "lucide-react";
+import { ArrowRight, Menu, X, Download } from "lucide-react";
 
 type NavLink = {
   href: string;
   label: string;
 };
 
+// Added the Videos link here, pointing to the #shorts ID
 const LINKS: NavLink[] = [
   { href: "/#about", label: "WHO WE ARE" },
   { href: "/#services", label: "WHAT WE DO" },
+  { href: "/#shorts", label: "VIDEOS" },
   { href: "/#blogs", label: "BLOGS" },
 ];
-
-/* ------------------------------------------------------------------ */
-/* BookNowButton — purple HUD variant, scrolls to #contact             */
-/* ------------------------------------------------------------------ */
 
 function BookNowButton({
   className = "",
@@ -29,15 +27,30 @@ function BookNowButton({
       onClick={onClick}
       className={`hud-book-btn hud-book-btn--purple group ${className}`}
     >
-      <span className="mr-2">Book Now</span>
+      <span className="mr-2">Talk To Us Now</span>
       <ArrowRight className="w-4 h-4 text-cyber-purple group-hover:translate-x-1.5 transition-transform duration-200" />
     </a>
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* Navbar                                                              */
-/* ------------------------------------------------------------------ */
+function DownloadButton({
+  className = "",
+  onClick,
+}: {
+  className?: string;
+  onClick?: () => void;
+}) {
+  return (
+    <a
+      href="/#contact"
+      onClick={onClick}
+      className={`flex items-center justify-center gap-2 rounded-xl border border-cyber-cyan/30 bg-cyber-cyan/5 px-4 py-2 text-sm font-semibold text-cyber-cyan transition-all hover:bg-cyber-cyan/10 hover:shadow-[0_0_20px_rgba(0,240,255,0.2)] ${className}`}
+    >
+      <Download className="w-4 h-4" />
+      <span>Brochure</span>
+    </a>
+  );
+}
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
@@ -67,7 +80,9 @@ export default function Navbar() {
             ))}
           </nav>
 
-          <div className="hidden sm:flex items-center">
+          {/* Added the Download button next to the Book Now button */}
+          <div className="hidden sm:flex items-center gap-3">
+            <DownloadButton />
             <BookNowButton />
           </div>
 
@@ -96,7 +111,13 @@ export default function Navbar() {
               {l.label}
             </a>
           ))}
-          <div className="pt-2">
+          
+          {/* Stacked buttons for mobile */}
+          <div className="pt-2 flex flex-col gap-3">
+            <DownloadButton
+              onClick={() => setMobileOpen(false)}
+              className="w-full py-3"
+            />
             <BookNowButton
               onClick={() => setMobileOpen(false)}
               className="w-full py-3"

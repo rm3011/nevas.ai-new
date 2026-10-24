@@ -1,26 +1,5 @@
+import { motion } from "motion/react";
 import { Link } from "react-router-dom";
-import { Mail, MapPin, Phone } from "lucide-react";
-
-/* ------------------------------------------------------------------ */
-/* Data                                                                */
-/* ------------------------------------------------------------------ */
-
-const NAV_LINKS = [
-  { label: "WHO WE ARE", href: "#about", route: false },
-  { label: "WHAT WE DO", href: "#services", route: false },
-  { label: "LATEST SHORTS", href: "#shorts", route: false },
-  { label: "BLOG", href: "/blogs", route: true },
-  { label: "CONTACT US", href: "#contact", route: false },
-];
-
-const SERVICE_LINKS = [
-  "AI Consulting Services",
-  "Custom AI & ML Development",
-  "Generative AI Development",
-  "Conversational AI",
-  "AI App Development",
-  "LLM Fine-Tuning",
-];
 
 const SOCIALS = [
   {
@@ -36,7 +15,7 @@ const SOCIALS = [
   {
     label: "LinkedIn",
     href: "https://www.linkedin.com/company/nevasai/",
-    path: "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z",
+    path: "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 24 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z",
   },
   {
     label: "YouTube",
@@ -45,189 +24,92 @@ const SOCIALS = [
   },
 ];
 
-const CONTACT = [
-  { icon: Phone, label: "+91 9884042931", href: "tel:+919884042931" },
-  { icon: Mail, label: "info@nevas.ai", href: "mailto:info@nevas.ai" },
-  {
-    icon: MapPin,
-    label: "39, Elumalai Street, West Tambaram, Chennai 600 045, India",
-    href: undefined,
-  },
-];
-
-/* ------------------------------------------------------------------ */
-/* Component                                                           */
-/* ------------------------------------------------------------------ */
-
 export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative isolate w-full overflow-hidden border-t border-cyber-purple/15 bg-cyber-bg">
-      {/* Ambient glow */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -left-40 -top-20 -z-10 h-95 w-95 rounded-full bg-cyber-cyan/10 blur-[180px]"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-40 -bottom-20 -z-10 h-95 w-95 rounded-full bg-cyber-purple/10 blur-[180px]"
-      />
+    <footer className="relative isolate w-full overflow-hidden border-t border-white/5 bg-[#040711]">
+      {/* Ambient Glows */}
+      <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[300px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyber-purple/10 blur-[120px]" />
+      <div className="pointer-events-none absolute bottom-0 right-0 -z-10 h-64 w-64 translate-x-1/3 translate-y-1/3 rounded-full bg-cyber-cyan/5 blur-[100px]" />
 
-      {/* Faint grid overlay */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 opacity-30 bg-[linear-gradient(rgba(0,240,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(0,240,255,0.04)_1px,transparent_1px)] bg-size-[60px_60px]"
-      />
+      <div className="mx-auto flex max-w-7xl flex-col items-center px-4 py-16 sm:px-6 lg:px-8">
+        
+        {/* Top: Brand & Tagline */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="flex flex-col items-center text-center"
+        >
+          <Link to="/" className="group inline-flex items-center" aria-label="Nevas AI home">
+            <img
+              src="/logo.png"
+              alt="Nevas AI"
+              className="h-8 w-auto object-contain transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+              decoding="async"
+            />
+          </Link>
 
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-        {/* Top: brand + 3 link columns */}
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-12 lg:gap-8">
-          {/* Brand column */}
-          <div className="lg:col-span-4">
-            <a href="#" className="inline-flex items-center" aria-label="Nevas AI home">
-              <img
-                src="/logo.png"
-                alt="Nevas AI"
-                className="h-6 w-auto object-contain"
-                loading="lazy"
-                decoding="async"
-              />
-            </a>
+          <p className="mt-6 max-w-md text-sm leading-relaxed text-gray-400">
+            Powering the future of fashion and manufacturing with AI-driven automation, intelligence, and scale.
+          </p>
+        </motion.div>
 
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-gray-400">
-              Powering the future of fashion and manufacturing with AI-driven
-              automation, intelligence, and scale.
-            </p>
+        {/* Socials */}
+        <motion.div 
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          variants={{
+            hidden: {},
+            show: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
+          }}
+          className="mt-8 flex items-center gap-4"
+        >
+          {SOCIALS.map((s) => (
+            <motion.a
+              key={s.label}
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={s.label}
+              variants={{
+                hidden: { opacity: 0, y: 10 },
+                show: { opacity: 1, y: 0 }
+              }}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.02] text-gray-400 transition-all duration-300 hover:-translate-y-1 hover:border-cyber-purple/50 hover:bg-cyber-purple/10 hover:text-cyber-purple hover:shadow-[0_0_20px_rgba(168,85,247,0.3)]"
+            >
+              <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
+                <path d={s.path} />
+              </svg>
+            </motion.a>
+          ))}
+        </motion.div>
 
-            {/* Socials — purple */}
-            <div className="mt-6 flex items-center gap-3">
-              {SOCIALS.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={s.label}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-cyber-purple/30 bg-cyber-purple/5 text-cyber-purple transition-all hover:border-cyber-purple/70 hover:bg-cyber-purple/15 hover:shadow-[0_0_15px_rgba(168,85,247,0.4)]"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-4 w-4 fill-current"
-                    aria-hidden="true"
-                  >
-                    <path d={s.path} />
-                  </svg>
-                </a>
-              ))}
-            </div>
-          </div>
+        {/* Divider */}
+        <div className="my-10 h-px w-full max-w-3xl bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
-          {/* Navigate column */}
-          <div className="lg:col-span-2">
-            <h4 className="mb-5 font-mono text-xs uppercase tracking-[0.25em] text-cyber-purple">
-             [ Navigate ]
-            </h4>
-            <ul className="space-y-3">
-              {NAV_LINKS.map((l) =>
-                l.route ? (
-                  <li key={l.label}>
-                    <Link
-                      to={l.href}
-                      className="text-sm text-gray-400 transition-colors hover:text-cyber-purple"
-                    >
-                      {l.label}
-                    </Link>
-                  </li>
-                ) : (
-                  <li key={l.label}>
-                    <a
-                      href={l.href}
-                      className="text-sm text-gray-400 transition-colors hover:text-cyber-purple"
-                    >
-                      {l.label}
-                    </a>
-                  </li>
-                )
-              )}
-            </ul>
-          </div>
-
-          {/* Services column */}
-          <div className="lg:col-span-3">
-            <h4 className="mb-5 font-mono text-xs uppercase tracking-[0.25em] text-cyber-purple">
-              [ Services ]
-            </h4>
-            <ul className="space-y-3">
-              {SERVICE_LINKS.map((label) => (
-                <li key={label}>
-                  <a
-                    href="#services"
-                    className="text-sm text-gray-400 transition-colors hover:text-cyber-purple"
-                  >
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact column */}
-          <div className="lg:col-span-3">
-            <h4 className="mb-5 font-mono text-xs uppercase tracking-[0.25em] text-cyber-purple">
-              [ Contact ]
-            </h4>
-            <ul className="space-y-4">
-              {CONTACT.map((item) => {
-                const Icon = item.icon;
-                const inner = (
-                  <span className="flex items-start gap-3">
-                    <Icon className="mt-0.5 h-4 w-4 shrink-0 text-cyber-purple" />
-                    <span className="text-sm leading-relaxed text-gray-400">
-                      {item.label}
-                    </span>
-                  </span>
-                );
-                return (
-                  <li key={item.label}>
-                    {item.href ? (
-                      <a
-                        href={item.href}
-                        className="block transition-colors hover:text-cyber-purple"
-                      >
-                        {inner}
-                      </a>
-                    ) : (
-                      inner
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        </div>
-
-        {/* Divider — purple */}
-        <div className="my-10 h-px w-full bg-linear-to-r from-transparent via-cyber-purple/30 to-transparent" />
-
-        {/* Bottom bar */}
-        <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+        {/* Bottom Bar */}
+        <div className="flex w-full max-w-4xl flex-col items-center justify-between gap-4 sm:flex-row">
           <p className="font-mono text-[11px] uppercase tracking-widest text-gray-500">
-            © {year} Nevas.ai Consulting — All rights reserved
+            © {year} Nevas.ai Consulting. All rights reserved.
           </p>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-8">
             <a
               href="#"
               className="font-mono text-[11px] uppercase tracking-widest text-gray-500 transition-colors hover:text-cyber-purple"
             >
-              Privacy Policy
+              Privacy
             </a>
             <a
               href="#"
               className="font-mono text-[11px] uppercase tracking-widest text-gray-500 transition-colors hover:text-cyber-purple"
             >
-              Terms of Service
+              Terms
             </a>
           </div>
         </div>

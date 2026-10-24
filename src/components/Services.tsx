@@ -1,504 +1,241 @@
-import { useEffect, useRef, useState } from "react";
-import type { CSSProperties } from "react";
+import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-
-/* ------------------------------------------------------------------ */
-/* Types                                                               */
-/* ------------------------------------------------------------------ */
+import {
+  Activity,
+  ArrowRight,
+  Compass,
+  Cpu,
+  MessagesSquare,
+  SlidersHorizontal,
+  Smartphone,
+  Sparkles,
+  type LucideIcon,
+} from "lucide-react";
 
 type Service = {
-	id: string;
-	title: string;
-	description: string;
-	points: string[];
+  id: string;
+  title: string;
+  icon: LucideIcon;
+  description: string;
+  textile: string;
+  points: string[];
 };
-
-/* ------------------------------------------------------------------ */
-/* Data                                                                */
-/* ------------------------------------------------------------------ */
 
 const SERVICES: Service[] = [
-	{
-		id: "consulting",
-		title: "AI Consulting Services",
-		description:
-			"Not every idea is ready for full-scale AI implementation, and that's okay. Our AI consulting and PoC services help you explore, validate, and de-risk your AI initiatives before making major investments.",
-		points: [
-			"AI Readiness Audits",
-			"Discovery & Ideation Workshops",
-			"Scalable AI Roadmaps",
-			"Cost-Benefit & ROI Analysis",
-			"Rapid PoC Development",
-			"Executive Dashboards & Reporting",
-		],
-	},
-	{
-		id: "custom-ml",
-		title: "Custom AI & ML Development",
-		description:
-			"We build AI and machine learning solutions from the ground up. The purpose of our AI app development company is to develop solutions tailored to your data, your use case, and your industry. We manage the full lifecycle of AI model development.",
-		points: [
-			"Predictive Analytics",
-			"Recommendation Systems",
-			"Dynamic Pricing Models",
-			"Forecasting Tools",
-			"Fraud Detection",
-			"Image and Text Classification",
-		],
-	},
-	{
-		id: "generative-ai",
-		title: "Generative AI Development",
-		description:
-			"As a leading name in the top generative AI development company list, we build GenAI-powered systems that think, write, talk, and create using the world's most advanced language models. From chatbots to content creators, our tools are fine-tuned to deliver value fast.",
-		points: [
-			"LLM Integration",
-			"Custom Fine-Tuning",
-			"Generative AI Copilots",
-			"Knowledge Embedding & Retrieval (RAG)",
-			"Enterprise-grade Security",
-			"Real-Time, Context-Aware Responses",
-		],
-	},
-	{
-		id: "conversational-ai",
-		title: "Conversational AI",
-		description:
-			"Get smart assistants for sales, support, onboarding, and internal operations. Our AI chatbot development company designs multilingual chatbots, voice bots, and AI agents for customer service and engagement.",
-		points: [
-			"Custom Chatbots & Voicebots",
-			"RAG-Based Bots",
-			"Data-Interactive Chatbots",
-			"Omnichannel Availability",
-			"CRM & ERP Integration",
-			"Multilingual Voice & Text Bots",
-		],
-	},
-	{
-		id: "ai-app",
-		title: "AI App Development",
-		description:
-			"Known for the #1 AI app development company in India, we integrate smart features into your web and mobile apps, so they work better and faster. Your apps will anticipate user needs, deliver lightning-fast responses, and keep people engaged.",
-		points: [
-			"Voice, Vision & NLP Features",
-			"Custom AI API Integration",
-			"Real-Time Intelligence & Prediction",
-			"Cross-Platform Compatibility",
-			"AI-Driven Personalization",
-			"Mobile & Edge Optimization",
-		],
-	},
-	{
-		id: "llm-tuning",
-		title: "LLM Fine-Tuning & Customization",
-		description:
-			"As an enterprise AI software development company, we help businesses train, fine-tune, and host LLMs like GPT, Claude, or LLaMA to their specific industry, data, and use cases. Plus, we ensure more relevant, secure, and high-performing AI experiences.",
-		points: [
-			"Private LLM Fine-Tuning",
-			"Retrieval-Augmented Generation",
-			"Generative AI Tasks",
-			"Web Scraping for Real-Time Context",
-			"Custom Guardrails & Filters",
-			"Secure Hosting & Latency Optimization",
-		],
-	},
-	{
-		id: "image-ai",
-		title: "Image-Based AI Solutions",
-		description:
-			"We develop AI tools that understand, generate, and transform images with precision. From visual content creation to intelligent editing, custom solutions by our AI development company support a wide range of business needs.",
-		points: [
-			"Image-to-Text Summarizers",
-			"Text-to-Image Generation",
-			"AI Face Swapping",
-			"AI Image Upscaling",
-			"AI Outpainting & Background Fill",
-			"AI-Powered Image Editing",
-		],
-	},
-	{
-		id: "ai-product",
-		title: "AI Product Development",
-		description:
-			"AI is the foundation of modern software products. Being the best AI product development company in India, our team plan, prototype, and launch AI-first platforms that are impactful, and built for scale. From strategy to deployment, we partner with you at every step.",
-		points: [
-			"AI Strategy + Design + Engineering",
-			"Rapid Prototyping and Usability Testing",
-			"Modular Architecture",
-			"Built-In Analytics",
-			"Seamless Integration",
-			"Multi-Cloud Support",
-		],
-	},
-	{
-		id: "aiops",
-		title: "AIOps Services",
-		description:
-			"We help enterprises bring intelligence to their IT and DevOps operations. Our team uses machine learning to detect anomalies, prevent outages, and accelerate root cause analysis. Our AIOps solutions add intelligence across observability and incident response pipelines.",
-		points: [
-			"Log & Metrics Analysis",
-			"AI/ML Workload & Infra Optimization",
-			"Predictive Alerting",
-			"Cloud & Hybrid Environment Support",
-			"Automated Remediation",
-		],
-	},
+  {
+    id: "consulting",
+    title: "AI Consulting",
+    icon: Compass,
+    description: "Not every idea is ready for full-scale AI implementation. Our consulting and PoC services help you explore, validate, and de-risk your AI initiatives before making major investments.",
+    textile: "Find where your mill loses margin first, before you spend on any technology.",
+    points: ["AI Readiness Audits", "Discovery Workshops", "Scalable AI Roadmaps", "ROI Analysis", "Rapid PoC Development", "Executive Dashboards"],
+  },
+  {
+    id: "custom-ml",
+    title: "Custom AI & ML",
+    icon: Cpu,
+    description: "We build AI and machine learning solutions from the ground up. We develop solutions tailored to your data, your use case, and your industry, managing the full lifecycle of model development.",
+    textile: "Defect, demand and yield models trained on your own looms, orders and fabric data.",
+    points: ["Predictive Analytics", "Recommendation Systems", "Dynamic Pricing", "Forecasting Tools", "Fraud Detection", "Image Classification"],
+  },
+  {
+    id: "generative-ai",
+    title: "Generative AI",
+    icon: Sparkles,
+    description: "We build GenAI-powered systems that think, write, talk, and create using the world's most advanced language models. From chatbots to content creators, our tools are fine-tuned to deliver value fast.",
+    textile: "Design copilots that turn mood boards into specs, tech packs and buyer-ready copy.",
+    points: ["LLM Integration", "Custom Fine-Tuning", "Generative Copilots", "RAG Knowledge Retrieval", "Enterprise Security", "Real-Time Context"],
+  },
+  {
+    id: "conversational-ai",
+    title: "Conversational AI",
+    icon: MessagesSquare,
+    description: "Get smart assistants for sales, support, onboarding, and internal operations. We design multilingual chatbots, voice bots, and AI agents for customer service and engagement.",
+    textile: "Buyer and supplier assistants that answer order, stock and sample queries in any language.",
+    points: ["Custom Chatbots", "RAG-Based Bots", "Omnichannel Availability", "CRM & ERP Integration", "Multilingual Voice & Text", "Data-Interactive Chatbots"],
+  },
+  {
+    id: "ai-app",
+    title: "AI App Dev",
+    icon: Smartphone,
+    description: "We integrate smart features into your web and mobile apps, so they work better and faster. Your apps will anticipate user needs, deliver lightning-fast responses, and keep people engaged.",
+    textile: "Virtual try-on, order tracking and smart catalogs inside your own app.",
+    points: ["Voice & Vision Features", "Custom AI API Integration", "Real-Time Intelligence", "Cross-Platform", "AI Personalization", "Mobile Optimization"],
+  },
+  {
+    id: "llm-tuning",
+    title: "LLM Fine-Tuning",
+    icon: SlidersHorizontal,
+    description: "We help businesses train, fine-tune, and host LLMs like GPT, Claude, or LLaMA to their specific industry. We ensure more relevant, secure, and high-performing AI experiences.",
+    textile: "A private model that knows your fabrics, specs and SOPs, and keeps them in-house.",
+    points: ["Private LLM Tuning", "RAG Implementation", "Web Scraping Context", "Custom Guardrails", "Secure Hosting", "Latency Optimization"],
+  },
+  {
+    id: "aiops",
+    title: "AIOps Services",
+    icon: Activity,
+    description: "Bring intelligence to your IT and DevOps operations. We use machine learning to detect anomalies, prevent outages, and accelerate root cause analysis across your pipelines.",
+    textile: "Keep ERP and factory systems running, with outages caught before the floor feels them.",
+    points: ["Log & Metrics Analysis", "Infra Optimization", "Predictive Alerting", "Cloud & Hybrid Support", "Automated Remediation"],
+  },
 ];
 
-/* ------------------------------------------------------------------ */
-/* Image map — replace with your own URLs or local paths               */
-/* ------------------------------------------------------------------ */
-
 const SERVICE_IMAGES: Record<string, string> = {
-	consulting: "https://tse1.mm.bing.net/th/id/OIP.mfruj0s9L5G7bxNX_TznZAHaEO?r=0&w=1792&h=1024&rs=1&pid=ImgDetMain&o=7&rm=3",
-	"custom-ml": "https://consulting.groyyo.com/wp-content/uploads/2024/09/Picture1-scaled.jpg",
-	"generative-ai": "https://tse2.mm.bing.net/th/id/OIP.VIfMArpYJKk8j-AUK_YyRgHaEO?r=0&w=1344&h=768&rs=1&pid=ImgDetMain&o=7&rm=3",
-	"conversational-ai": "https://www.textilesresources.com/wp-content/uploads/2024/09/AI-is-enhancing-quality-control-in-textile-manufacturing-696x392.jpg",
-	"ai-app": "https://knowingfabric.com/wp-content/uploads/2024/07/textile_market_forecast_analysis.jpg",
-	"llm-tuning": "https://tse2.mm.bing.net/th/id/OIP.BTNMGmVfVHgGGjaG22I1vQHaEp?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
-	"image-ai": "https://static.vecteezy.com/system/resources/previews/027/675/079/large_2x/futuristic-fashion-mannequin-in-the-store-ai-generative-free-photo.jpeg",
-	"ai-product": "https://tse4.mm.bing.net/th/id/OIP.cnegVSZDwUXuttxQvyV5wQHaEC?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
-	aiops: "https://eonsr.com/wp-content/uploads/2026/02/are-ai-fashion-design-tools-revolutionizing-the-apparel-industry-featured-image.png",
+  consulting: "https://api.pulauintanlestari.com/files/post/2025/05/how-ai-is-revolutionizing-the-textile-industry-image-03-1746686398847.webp",
+  "custom-ml": "https://consulting.groyyo.com/wp-content/uploads/2024/09/Picture1-scaled.jpg",
+  "generative-ai": "https://easyodm.tech/wp-content/uploads/2023/06/ai-in-textile-industry-1024x573.webp",
+  "conversational-ai": "https://static.vecteezy.com/system/resources/previews/024/570/142/large_2x/3d-rendering-robot-working-in-the-laboratory-artificial-intelligence-and-machine-learning-concept-an-ai-robot-scientist-doing-experiments-in-the-laboratory-ai-generated-free-photo.jpg",
+  "ai-app": "https://labeloom.com/cdn/shop/articles/AI_and_Fashion_1200x1200.webp?v=1726742207",
+  "llm-tuning": "https://t4.ftcdn.net/jpg/08/50/54/51/360_F_850545169_1OQNmlhKs8NnZn4rBjTMbozaedqAXWS8.jpg",
+  aiops: "https://eonsr.com/wp-content/uploads/2026/02/are-ai-fashion-design-tools-revolutionizing-the-apparel-industry-featured-image.png",
 };
 
-/* ------------------------------------------------------------------ */
-/* Constants                                                           */
-/* ------------------------------------------------------------------ */
+export default function ServicesCarousel() {
+  const [activeId, setActiveId] = useState<string>(SERVICES[0].id);
+  const [direction, setDirection] = useState(0);
 
-const SECTION_CLASS = [
-	"relative isolate w-full overflow-hidden",
-	"bg-[#040711] text-white",
-	"py-16 px-4 sm:py-20 sm:px-6 lg:py-24 lg:px-14",
-].join(" ");
+  const activeIndex = SERVICES.findIndex((s) => s.id === activeId);
+  const active = SERVICES[activeIndex];
+  const ActiveIcon = active.icon;
 
-const GRID_OVERLAY_STYLE: CSSProperties = {
-	backgroundImage:
-		"linear-gradient(rgba(34,211,238,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(34,211,238,0.06) 1px, transparent 1px)",
-	backgroundSize: "60px 60px",
-};
+  const handleSelect = (id: string, index: number) => {
+    setDirection(index > activeIndex ? 1 : -1);
+    setActiveId(id);
+  };
 
-const LIST_WRAPPER_CLASS = [
-	"relative flex flex-col gap-2",
-	"h-full",
-	"overflow-y-auto",
-	"rounded-2xl",
-	"border border-cyan-400/15",
-	"bg-[#0B1220]/60 p-3",
-	"backdrop-blur-xl",
-	"shadow-[0_0_40px_-10px_rgba(34,211,238,0.15)]",
-	"custom-scrollbar",
-].join(" ");
+  const slideVariants = {
+    enter: (dir: number) => ({ x: dir > 0 ? 50 : -50, opacity: 0 }),
+    center: { x: 0, opacity: 1 },
+    exit: (dir: number) => ({ x: dir > 0 ? -50 : 50, opacity: 0 }),
+  };
 
-const PANEL_CLASS = [
-	"relative h-full",
-	"overflow-hidden",
-	"rounded-2xl",
-	"border border-cyan-400/15",
-	"bg-[#0B1220]/70",
-	"p-6 sm:p-8 lg:p-10",
-	"backdrop-blur-2xl",
-	"shadow-[0_0_60px_-15px_rgba(236,72,153,0.15)]",
-].join(" ");
+  return (
+    <section id="services" className="relative isolate w-full overflow-hidden bg-[#040711] py-20 px-4 sm:px-6 lg:px-14">
+      
+      {/* Background Glows */}
+      <div className="pointer-events-none absolute -left-40 top-20 -z-10 h-105 w-105 rounded-full bg-cyber-cyan/15 blur-[180px]" />
+      <div className="pointer-events-none absolute right-0 top-1/2 -z-10 h-115 w-115 -translate-y-1/2 rounded-full bg-cyber-pink/10 blur-[200px]" />
 
-/* ------------------------------------------------------------------ */
-/* Sub-components                                                      */
-/* ------------------------------------------------------------------ */
+      <div className="mx-auto max-w-7xl">
+        
+        {/* Header */}
+        <div className="mb-10 flex flex-col items-center text-center">
+          <motion.p
+            initial={{ opacity: 0, y: 8 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-4 inline-flex items-center space-x-2 rounded-full border border-cyber-cyan/30 glass-panel px-3 py-1 font-mono text-xs uppercase tracking-widest text-cyber-cyan"
+          >
+            <span>[ what we do ]</span>
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="font-display text-3xl leading-[1.15] font-extrabold tracking-tight text-white sm:text-5xl"
+          >
+            AI Development Services <br className="hidden sm:block" />
+            <span className="neon-text-gradient">We Offer</span>
+          </motion.h2>
+        </div>
 
-type ServiceButtonProps = {
-	service: Service;
-	isActive: boolean;
-	onSelect: () => void;
-	buttonRef: (el: HTMLButtonElement | null) => void;
-};
+        {/* Navigation Dock - Reduced margin bottom (mb-4) */}
+        <div className="mb-4 flex w-full snap-x gap-2 overflow-x-auto pb-4 [scrollbar-width:none] lg:justify-center">
+          {SERVICES.map((service, index) => {
+            const isActive = service.id === activeId;
+            const Icon = service.icon;
+            return (
+              <button
+                key={service.id}
+                onClick={() => handleSelect(service.id, index)}
+                className={`relative flex shrink-0 snap-start items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                  isActive ? "text-white" : "text-gray-400 hover:bg-white/5 hover:text-white"
+                }`}
+              >
+                {isActive && (
+                  <motion.span
+                    layoutId="active-pill"
+                    className="absolute inset-0 -z-10 rounded-full border border-cyber-cyan/40 bg-linear-to-r from-cyber-cyan/20 via-cyber-purple/25 to-cyber-pink/20"
+                    transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                  />
+                )}
+                <Icon className={`h-4 w-4 ${isActive ? "text-cyber-cyan" : "text-gray-500"}`} />
+                <span>{service.title}</span>
+              </button>
+            );
+          })}
+        </div>
 
-function ServiceButton({ service, isActive, onSelect, buttonRef }: ServiceButtonProps) {
-	const baseClass = [
-		"relative w-full flex-shrink-0 overflow-hidden",
-		"rounded-xl px-5 py-4",
-		"text-left font-cervino text-[13px] uppercase tracking-wide",
-		"transition-all duration-300 cursor-pointer",
-	].join(" ");
+        {/* Carousel Container - Reduced min-height from 550 to 480 */}
+        <div className="relative min-h-[480px] w-full overflow-hidden rounded-3xl border border-cyber-cyan/20 bg-cyber-card shadow-[0_20px_80px_rgba(0,0,0,0.4)]">
+          <AnimatePresence custom={direction} mode="wait">
+            <motion.div
+              key={active.id}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              className="grid h-full w-full grid-cols-1 lg:grid-cols-2"
+            >
+              
+              {/* Left Side: Image */}
+              <div className="relative h-64 w-full lg:h-full overflow-hidden">
+                <img
+                  src={SERVICE_IMAGES[active.id]}
+                  alt={active.title}
+                  className="absolute inset-0 h-full w-full object-cover saturate-[0.8]"
+                />
+                <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-cyber-cyan/20 to-cyber-pink/20 mix-blend-soft-light" />
+                <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-cyber-card via-cyber-card/20 to-transparent lg:bg-linear-to-r lg:from-transparent lg:via-cyber-card/20 lg:to-cyber-card" />
+                
+                <div className="absolute left-6 top-6 flex h-12 w-12 items-center justify-center rounded-xl border border-cyber-cyan/40 bg-cyber-bg/60 backdrop-blur-md">
+                  <ActiveIcon className="h-6 w-6 text-cyber-cyan" />
+                </div>
+              </div>
 
-	const stateClass = isActive
-		? "text-white"
-		: "bg-[#0F1A2E] text-gray-300 hover:text-white hover:bg-[#132033]";
+              {/* Right Side: Content - Reduced bottom padding and margins */}
+              <div className="relative flex flex-col justify-center px-6 pt-6 pb-5 sm:px-10 sm:pt-10 sm:pb-7 lg:px-12 lg:pt-12 lg:pb-8">
+                <h3 className="mb-3 font-display text-2xl font-bold text-white sm:text-3xl">
+                  {active.title}
+                </h3>
+                
+                <p className="mb-4 text-sm leading-relaxed text-gray-300">
+                  {active.description}
+                </p>
 
-	return (
-		<button
-			ref={buttonRef}
-			role="tab"
-			aria-selected={isActive}
-			onClick={onSelect}
-			className={`${baseClass} ${stateClass}`}
-		>
-			{isActive && <ActiveButtonBackground />}
+                {/* Textile Callout - Reduced margin & padding */}
+                <div className="relative mb-5 rounded-xl border border-cyber-cyan/20 bg-cyber-cyan/5 py-2.5 pl-5 pr-4">
+                  <span className="absolute bottom-2.5 left-0 top-2.5 w-0.75 rounded-full bg-cyber-cyan shadow-[0_0_12px_rgba(0,240,255,0.7)]" />
+                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-cyber-cyan/80">Textile Impact</p>
+                  <p className="mt-1 font-display text-sm font-semibold text-white">{active.textile}</p>
+                </div>
 
-			<span className="relative z-10 flex items-center justify-between gap-3">
-				<span>{service.title}</span>
+                {/* Points Grid - Reduced margin */}
+                <div className="mb-5 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  {active.points.map((point, i) => (
+                    <div key={i} className="flex items-center gap-2 rounded-lg border border-white/5 bg-white/5 px-3 py-1.5">
+                      <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-cyber-cyan/20 text-[10px] text-cyber-cyan">✓</span>
+                      <span className="text-xs text-gray-300">{point}</span>
+                    </div>
+                  ))}
+                </div>
 
-				{isActive && (
-					<motion.span
-						initial={{ opacity: 0, x: -4 }}
-						animate={{ opacity: 1, x: 0 }}
-						transition={{ duration: 0.2 }}
-						className="text-cyan-300"
-						aria-hidden="true"
-					>
-						→
-					</motion.span>
-				)}
-			</span>
-		</button>
-	);
-}
+                {/* CTA - Reduced top padding */}
+                <div className="mt-auto pt-4 border-t border-white/10">
+                  <a href="#contact" className="hud-book-btn hud-book-btn--purple group w-fit gap-2">
+                    <span>Discuss this with our team</span>
+                    <ArrowRight className="h-4 w-4 text-cyber-purple transition-transform group-hover:translate-x-1" />
+                  </a>
+                </div>
+              </div>
 
-function ActiveButtonBackground() {
-	return (
-		<>
-			<motion.span
-				layoutId="service-active-bg"
-				transition={{ type: "spring", stiffness: 400, damping: 32 }}
-				className="absolute inset-0 -z-10 rounded-xl bg-linear-to-r from-cyan-500/25 via-fuchsia-500/25 to-purple-500/25 border border-cyan-400/40"
-			/>
-			<motion.span
-				aria-hidden="true"
-				initial={{ x: "-120%" }}
-				animate={{ x: "120%" }}
-				transition={{ duration: 2.4, repeat: Infinity, ease: "linear" }}
-				className="pointer-events-none absolute inset-y-0 -z-10 w-1/3 bg-linear-to-r from-transparent via-cyan-300/20 to-transparent"
-			/>
-			<span
-				aria-hidden="true"
-				className="pointer-events-none absolute left-0 top-1/2 -z-10 h-6 w-0.75 -translate-y-1/2 rounded-full bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.9)]"
-			/>
-		</>
-	);
-}
-
-type ServicePointsProps = {
-	serviceId: string;
-	points: string[];
-};
-
-function ServicePoints({ serviceId, points }: ServicePointsProps) {
-	return (
-		<motion.ul
-			role="list"
-			initial="hidden"
-			animate="visible"
-			variants={{ visible: { transition: { staggerChildren: 0.06 } } }}
-			className="relative z-10 mt-8 grid grid-cols-1 gap-x-10 gap-y-4 sm:grid-cols-2"
-		>
-			{points.map((point, index) => (
-				<motion.li
-					key={`${serviceId}-${index}`}
-					variants={{
-						hidden: { opacity: 0, y: 8 },
-						visible: { opacity: 1, y: 0 },
-					}}
-					transition={{ duration: 0.35, ease: "easeOut" }}
-					className="flex items-start gap-3"
-				>
-					<span
-						aria-hidden="true"
-						className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-cyan-400/40 bg-cyan-400/5 text-[11px] font-semibold text-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.25)]"
-					>
-						✓
-					</span>
-					<span className="font-cervino text-[13px] uppercase tracking-wide text-gray-200 sm:text-[14px]">
-						{point}
-					</span>
-				</motion.li>
-			))}
-		</motion.ul>
-	);
-}
-
-function PanelDecorations() {
-	return (
-		<>
-			<div
-				aria-hidden="true"
-				className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-linear-to-br from-cyan-500/25 via-purple-500/15 to-transparent blur-3xl"
-			/>
-			<div
-				aria-hidden="true"
-				className="pointer-events-none absolute -left-24 -bottom-24 h-64 w-64 rounded-full bg-linear-to-tr from-fuchsia-500/25 via-purple-500/15 to-transparent blur-3xl"
-			/>
-			<div
-				aria-hidden="true"
-				className="pointer-events-none absolute inset-x-6 top-0 h-px bg-linear-to-r from-transparent via-cyan-400/40 to-transparent"
-			/>
-		</>
-	);
-}
-
-function PanelHeader() {
-	return (
-		<div className="mb-4 flex items-center gap-3">
-			<motion.span
-				initial={{ scaleX: 0 }}
-				animate={{ scaleX: 1 }}
-				transition={{ duration: 0.5, ease: "easeOut" }}
-				style={{ transformOrigin: "left" }}
-				className="block h-0.75 w-10 rounded-full bg-linear-to-r from-cyan-400 to-fuchsia-400 shadow-[0_0_12px_rgba(34,211,238,0.6)]"
-			/>
-			<span className="font-mono text-xs uppercase tracking-[0.25em] text-cyan-300/80">
-				[ service ]
-			</span>
-		</div>
-	);
-}
-
-/* ------------------------------------------------------------------ */
-/* Main component                                                      */
-/* ------------------------------------------------------------------ */
-
-export default function Services() {
-	const [activeId, setActiveId] = useState<string>(SERVICES[0].id);
-	const buttonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-	const initialActiveId = useRef(activeId);
-
-	const active = SERVICES.find((s) => s.id === activeId) ?? SERVICES[0];
-
-	useEffect(() => {
-		if (
-			activeId !== initialActiveId.current &&
-			document.readyState === "complete"
-		) {
-			buttonRefs.current[activeId]?.scrollIntoView({
-				block: "nearest",
-				behavior: "smooth",
-			});
-		}
-	}, [activeId]);
-
-	return (
-		<section
-			id="services"
-			aria-labelledby="services-explorer-heading"
-			className={SECTION_CLASS}
-		>
-			{/* Neon blurred blobs */}
-			<div
-				aria-hidden="true"
-				className="pointer-events-none absolute -left-40 top-20 -z-10 h-105 w-105 rounded-full bg-cyan-500/20 blur-[180px]"
-			/>
-			<div
-				aria-hidden="true"
-				className="pointer-events-none absolute right-0 top-1/2 -z-10 h-115 w-115 -translate-y-1/2 rounded-full bg-fuchsia-500/15 blur-[200px]"
-			/>
-			<div
-				aria-hidden="true"
-				className="pointer-events-none absolute left-1/3 -bottom-32 -z-10 h-95 w-95 rounded-full bg-purple-500/20 blur-[180px]"
-			/>
-
-			{/* Faint diagonal grid */}
-			<div
-				aria-hidden="true"
-				className="pointer-events-none absolute inset-0 -z-10 opacity-40"
-				style={GRID_OVERLAY_STYLE}
-			/>
-
-			<div className="mx-auto max-w-7xl">
-				{/* Heading */}
-				<div className="mb-12 max-w-3xl">
-					<motion.p
-						initial={{ opacity: 0, y: 8 }}
-						whileInView={{ opacity: 1, y: 0 }}
-						viewport={{ once: true, amount: 0.3 }}
-						transition={{ duration: 0.5 }}
-						className="mb-4 inline-flex items-center space-x-2 rounded-full glass-panel border border-cyber-cyan/30 px-3 py-1 font-mono text-xs uppercase tracking-widest text-cyber-cyan"
-					>
-						<span>[ what we do ]</span>
-					</motion.p>
-
-					<motion.h2
-						id="services-explorer-heading"
-						initial={{ opacity: 0, y: 12 }}
-						whileInView={{ opacity: 1, y: 0 }}
-						viewport={{ once: true, amount: 0.3 }}
-						transition={{ duration: 0.5, delay: 0.05, ease: "easeOut" }}
-						className="font-cervino text-[32px] leading-10.5 uppercase tracking-tight text-white sm:text-[42px] sm:leading-13.5 lg:text-[52px] lg:leading-16"
-					>
-						AI Development Services <br className="hidden sm:block" />
-						<span className="bg-linear-to-r from-cyan-400 via-blue-400 to-fuchsia-400 bg-clip-text text-transparent">
-							We Offer
-						</span>
-					</motion.h2>
-
-					<motion.p
-						initial={{ opacity: 0, y: 10 }}
-						whileInView={{ opacity: 1, y: 0 }}
-						viewport={{ once: true, amount: 0.3 }}
-						transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
-						className="mt-5 max-w-2xl font-cervino text-sm leading-7 text-gray-400 sm:text-base"
-					>
-						Explore our end-to-end AI capabilities. Click any service on the left to see
-						how we deliver it.
-					</motion.p>
-				</div>
-
-				{/* Explorer — items-stretch makes both columns equal height */}
-				<div className="grid gap-6 lg:grid-cols-[minmax(260px,340px)_1fr] lg:gap-8 lg:items-stretch">
-					{/* Left: switchable list */}
-					<div role="tablist" aria-orientation="vertical" className={LIST_WRAPPER_CLASS}>
-						{SERVICES.map((service) => (
-							<ServiceButton
-								key={service.id}
-								service={service}
-								isActive={service.id === activeId}
-								onSelect={() => setActiveId(service.id)}
-								buttonRef={(el) => {
-									buttonRefs.current[service.id] = el;
-								}}
-							/>
-						))}
-					</div>
-
-					{/* Right: detail panel */}
-					<div className="relative h-full">
-						<AnimatePresence mode="wait">
-							<motion.article
-								key={active.id}
-								initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
-								animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-								exit={{ opacity: 0, y: -8, filter: "blur(6px)" }}
-								transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-								className={PANEL_CLASS}
-							>
-								<PanelDecorations />
-
-								<div className="relative z-10">
-									<PanelHeader />
-
-									<h3 className="font-cervino text-2xl leading-tight uppercase text-white sm:text-3xl lg:text-4xl">
-										{active.title}
-									</h3>
-
-									{/* Landscape image between title and description */}
-									<div className="relative mt-6 mb-6 overflow-hidden rounded-xl border border-cyan-400/15">
-										<img
-											src={SERVICE_IMAGES[active.id]}
-											alt={active.title}
-											className="h-48 w-full object-cover sm:h-56 lg:h-64"
-											loading="lazy"
-										/>
-										<div className="pointer-events-none absolute inset-0 bg-linear-to-t from-[#0B1220]/80 via-transparent to-transparent" />
-										<div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-cyan-400/50 to-transparent" />
-									</div>
-
-									<p className="max-w-3xl font-cervino text-sm leading-7 text-gray-400 sm:text-base">
-										{active.description}
-									</p>
-								</div>
-
-								<ServicePoints serviceId={active.id} points={active.points} />
-							</motion.article>
-						</AnimatePresence>
-					</div>
-				</div>
-			</div>
-		</section>
-	);
+            </motion.div>
+          </AnimatePresence>
+        </div>
+        
+      </div>
+    </section>
+  );
 }

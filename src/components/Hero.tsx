@@ -1,20 +1,26 @@
 import { ArrowRight, Sliders } from "lucide-react";
-
-const BANNER_IMAGE =
-  "https://img.freepik.com/premium-photo/vibrant-textile-mill-with-rows-looms-weaving-fabrics_980928-27124.jpg?w=2000";
+// 1. Import the video directly so Vite handles the path
+import heroVideo from "../assets/hero-banner-video.mp4";
 
 export default function Hero() {
   return (
     <section className="relative z-10 pt-28 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      {/* Banner image background */}
+      {/* Background Video */}
       <div className="absolute inset-0 -z-10">
-        <img
-          src={BANNER_IMAGE}
-          alt=""
-          aria-hidden="true"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-cyber-bg/50" />
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="h-full w-full object-cover"
+        >
+          <source src={heroVideo} type="video/mp4" />
+          {/* Fallback text for very old browsers */}
+          Your browser does not support the video tag.
+        </video>
+        
+        {/* Dark overlay to ensure text readability */}
+        <div className="absolute inset-0 bg-cyber-bg/60" />
       </div>
 
       <div className="relative max-w-5xl mx-auto text-center space-y-8">

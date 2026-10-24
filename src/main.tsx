@@ -4,11 +4,16 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "./routes/router";
 import "./index.css";
 
+// 1. Import Lenis
+import { ReactLenis } from "lenis/react";
+
 const rootEl = document.getElementById("root");
 if (!rootEl) throw new Error("Root element #root not found");
 
 createRoot(rootEl).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <ReactLenis root>
+      <RouterProvider router={router} />
+    </ReactLenis>
   </StrictMode>
 );

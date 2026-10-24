@@ -1,185 +1,236 @@
-import { useRef } from "react";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  useInView,
-  type Variants,
-} from "motion/react";
+import { useRef, useEffect, useState } from "react";
+import { motion, useScroll, useTransform, useInView, useReducedMotion, animate, type Variants } from "motion/react";
+import { ArrowRight } from "lucide-react";
 
 const image = {
-  src: "https://textalks.com/wp-content/uploads/2026/01/AI-copy.jpg",
-  alt: "NEVAS AI",
+  src: "https://th.bing.com/th/id/R.ab534b3f175047ea3e448a7a1b738861?rik=tP9elqXc3KlRwQ&riu=http%3a%2f%2fnews-images.dhan.co%2fnahar-spinning-mills-reports-net-loss-of-1291-63-lakhs-in-q3fy26.jpg&ehk=ZedSbyuuMyyv3rphTIezpaTbrPIji2RpFFfLm5xMo0A%3d&risl=&pid=ImgRaw&r=0",
+  alt: "NEVAS AI platform",
 };
 
 const stats = [
-  { value: "50+", label: "BRANDS SCALED", color: "text-cyber-cyan" },
-  { value: "42%", label: "RETURN REDUCTION", color: "text-cyber-purple" },
-  { value: "24/7", label: "AUTOMATION UPTIME", color: "text-cyber-pink" },
+  { target: 50, suffix: "+", label: "BRANDS SCALED", color: "text-cyber-cyan" },
+  { target: 42, suffix: "%", label: "RETURN REDUCTION", color: "text-cyber-purple" },
+  { target: 24, suffix: "/7", label: "AUTOMATION UPTIME", color: "text-cyber-pink" },
 ];
 
-/** Fade + drift upward when entering view. Physics-y spring. */
+const defects = [
+  { top: 27, left: 14, w: 26, h: 9, label: "Slub" },
+  { top: 44, left: 52, w: 30, h: 8, label: "Broken pick" },
+  { top: 60, left: 26, w: 24, h: 10, label: "Oil stain" },
+];
+const SCAN = 3.6;
+
 const floatIn: Variants = {
   hidden: { opacity: 0, y: 40 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      type: "spring",
-      stiffness: 60,
-      damping: 18,
-      mass: 0.9,
-    },
-  },
+  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 60, damping: 18, mass: 0.9 } },
 };
-
-/** Wrapper that staggers its children's animation. */
 const stagger: Variants = {
   hidden: {},
-  show: {
-    transition: { staggerChildren: 0.12, delayChildren: 0.1 },
-  },
+  show: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
 };
+
+function ScannerCard({ active, reduced }: { active: boolean; reduced: boolean }) {
+  return (
+    <div className="glass-panel relative h-full min-h-[320px] w-full overflow-hidden rounded-2xl border border-cyber-cyan/30 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-[#070b1a]"
+        style={{
+          backgroundImage:
+            "linear-gradient(135deg, rgba(0,243,255,.07), rgba(138,43,226,.12) 50%, rgba(255,0,255,.07)), repeating-linear-gradient(90deg, rgba(255,255,255,.07) 0 1px, transparent 1px 5px), repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, transparent 1px 5px)",
+        }}
+      />
+
+      {defects.map((d) => (
+        <motion.div
+          key={d.label}
+          aria-hidden="true"
+          className="absolute rounded-sm border border-cyber-pink/80 bg-cyber-pink/10"
+          style={{ top: `${d.top}%`, left: `${d.left}%`, width: `${d.w}%`, height: `${d.h}%` }}
+          initial={{ opacity: reduced ? 1 : 0 }}
+          animate={active && !reduced ? { opacity: [0, 1, 1, 0], scale: [0.92, 1, 1, 1] } : undefined}
+          transition={{
+            duration: SCAN,
+            times: [0, 0.05, 0.8, 1],
+            delay: ((d.top + d.h) / 100) * SCAN,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        >
+          <span className="absolute -top-5 left-0 whitespace-nowrap rounded-sm bg-cyber-pink px-1.5 py-0.5 font-mono text-[10px] font-semibold text-black">
+            {d.label}
+          </span>
+        </motion.div>
+      ))}
+
+      {!reduced && (
+        <motion.div
+          aria-hidden="true"
+          className="absolute inset-0"
+          style={{
+            background: "linear-gradient(to bottom, transparent 82%, rgba(0,243,255,.22) 98%, rgba(0,243,255,.95) 100%)",
+          }}
+          initial={{ y: "-100%" }}
+          animate={active ? { y: ["-100%", "0%"] } : { y: "-100%" }}
+          transition={{ duration: SCAN, repeat: Infinity, ease: "linear" }}
+        />
+      )}
+
+      <span className="absolute left-3 top-3 inline-flex items-center gap-2 rounded-full border border-cyber-cyan/30 bg-cyber-bg/70 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-cyber-cyan backdrop-blur">
+        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyber-cyan" />
+        Neural Vision · Live
+      </span>
+      <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-cyber-bg/95 to-transparent px-4 pb-3 pt-10">
+        <p className="font-display text-sm font-bold leading-snug text-white">Defects caught while the loom runs.</p>
+        <p className="mt-0.5 text-[11px] text-gray-400">Optical AI · 2,000 meters per minute</p>
+      </div>
+    </div>
+  );
+}
+
+function AnimatedCounter({ target, suffix, className }: { target: number; suffix: string; className: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const [count, setCount] = useState(0);
+  const reduced = !!useReducedMotion();
+
+  useEffect(() => {
+    if (!isInView) return;
+    if (reduced) {
+      setCount(target);
+      return;
+    }
+    const controls = animate(0, target, {
+      duration: 2,
+      ease: "easeOut",
+      onUpdate: (value) => setCount(Math.floor(value)),
+    });
+    return () => controls.stop();
+  }, [isInView, target, reduced]);
+
+  return (
+    <div ref={ref} className={className}>
+      {count}{suffix}
+    </div>
+  );
+}
 
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const reduced = !!useReducedMotion();
 
-  // Parallax: image drifts slower than the page as you scroll
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  const imageY = useTransform(scrollYProgress, [0, 1], [60, -60]);
-  const textY = useTransform(scrollYProgress, [0, 1], [30, -30]);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
   const glowScale = useTransform(scrollYProgress, [0, 1], [0.9, 1.15]);
-
-  const statsInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  const stageActive = useInView(stageRef, { margin: "-80px" });
 
   return (
-    <section
-      ref={sectionRef}
-      id="about"
-      className="relative z-10 py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"
-    >
-      {/* Ambient glow that breathes with scroll */}
+    <section ref={sectionRef} id="about" className="relative z-10 overflow-hidden px-4 py-24 sm:px-6 lg:px-8">
       <motion.div
         style={{ scale: glowScale }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 h-175 bg-cyber-cyan/5 rounded-full blur-[180px] pointer-events-none"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-175 w-175 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyber-cyan/5 blur-[180px]"
       />
 
-      <div className="max-w-7xl mx-auto relative">
-        {/* Section Header */}
+      <div className="relative mx-auto max-w-7xl">
         <motion.div
           variants={stagger}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-80px" }}
-          className="text-center mb-16 space-y-4"
+          className="mb-14 space-y-4 text-center"
         >
           <motion.div
             variants={floatIn}
-            className="inline-flex items-center space-x-2 px-3 py-1 rounded-full glass-panel border border-cyber-cyan/30"
+            className="glass-panel inline-flex items-center space-x-2 rounded-full border border-cyber-cyan/30 px-3 py-1"
           >
-            <span className="text-xs tracking-widest text-cyber-cyan uppercase">
-              [ WHO WE ARE ]
-            </span>
+            <span className="text-xs uppercase tracking-widest text-cyber-cyan">[ WHO WE ARE ]</span>
           </motion.div>
 
           <motion.h2
             variants={floatIn}
-            className="font-display text-3xl sm:text-5xl font-extrabold text-white tracking-tight"
+            className="font-display text-3xl font-extrabold tracking-tight text-white sm:text-5xl"
           >
-            Built for the{" "}
-            <span className="neon-text-gradient">Next Era</span> of Fashion
+            Built for the <span className="neon-text-gradient">Next Era</span> of Fashion
           </motion.h2>
         </motion.div>
+      </div>
 
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left Column: Text */}
-          <motion.div
-            style={{ y: textY }}
-            variants={stagger}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-100px" }}
-            className="space-y-6"
-          >
-            <motion.h3
-              variants={floatIn}
-              className="text-2xl font-bold text-white font-display"
-            >
-              We don't just build AI. We build the bridge between{" "}
-              <span className="text-cyber-cyan">intelligence</span> and{" "}
-              <span className="text-cyber-pink">style</span>.
-            </motion.h3>
+      {/* Main Container */}
+      <div className="relative mx-auto max-w-7xl">
+        <div
+          ref={stageRef}
+          className="relative isolate overflow-hidden rounded-[28px] border border-cyber-cyan/20 bg-cyber-bg shadow-[0_30px_120px_rgba(0,0,0,0.5)]"
+        >
+          {/* Background Image & Gradient Overlays */}
+          <img
+            src={image.src}
+            alt={image.alt}
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 -z-20 h-full w-full object-cover"
+          />
+          {/* Dark gradient so the text and card remain readable over the image */}
+          <div className="absolute inset-0 -z-10 bg-linear-to-t from-cyber-bg via-cyber-bg/80 to-cyber-bg/20 lg:bg-linear-to-r lg:from-cyber-bg/95 lg:via-cyber-bg/60 lg:to-transparent" />
 
-            <motion.p variants={floatIn} className="text-gray-400 leading-relaxed">
-              NEVAS.AI was founded by a collective of engineers and fashion
-              industry veterans who saw a gap: fashion brands were drowning in
-              data but starving for insight. We built our enterprise AI platform
-              to turn that noise into action.
-            </motion.p>
-
-            <motion.p variants={floatIn} className="text-gray-400 leading-relaxed">
-              From virtual try-on technology that reduces returns, to demand
-              forecasting that eliminates waste, our solutions are purpose-built
-              for the unique rhythm of the apparel industry.
-            </motion.p>
-
-            {/* Stats Row */}
-            <div className="pt-6 grid grid-cols-3 gap-4 border-t border-gray-800">
-              {stats.map((s, i) => (
-                <motion.div
-                  key={s.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={statsInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{
-                    delay: 0.2 + i * 0.15,
-                    type: "spring",
-                    stiffness: 80,
-                    damping: 16,
-                  }}
-                >
-                  <div className={`text-4xl sm:text-5xl font-bold ${s.color}`}>
-                    {s.value}
-                  </div>
-                  <div className="text-xs text-gray-500 mt-2">
-                    {s.label}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Right Column: Single Large Image */}
-          <motion.div
-            style={{ y: imageY }}
-          >
+          {/* Inner Content Wrapper (No massive top padding anymore) */}
+          <div className="relative p-6 sm:p-10 lg:p-14">
             <motion.div
-              initial={{ opacity: 0, y: 60, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{
-                type: "spring",
-                stiffness: 55,
-                damping: 18,
-                delay: 0.1,
-              }}
-              whileHover={{ y: -6, transition: { duration: 0.3 } }}
-              className="glass-panel p-2 rounded-2xl border border-cyber-cyan/20 overflow-hidden group"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: reduced ? 0 : 0.7, ease: "easeOut" }}
+              className="flex flex-col gap-10"
             >
-              <div className="relative overflow-hidden rounded-xl">
-                <img
-                  src={image.src}
-                  alt={image.alt}
-                  className="w-full h-[28rem] lg:h-[36rem] object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-cyber-bg/80 to-transparent pointer-events-none" />
+              {/* Top section: Text + Scanner Card */}
+              <div className="grid items-center gap-10 lg:grid-cols-2">
+                
+                {/* Text Content */}
+                <div className="space-y-6">
+                  <h3 className="font-display text-2xl font-bold text-white sm:text-3xl lg:text-4xl">
+                    We don't just build AI. We build the bridge between <span className="text-cyber-cyan">intelligence</span>{" "}
+                    and <span className="text-cyber-pink">style</span>.
+                  </h3>
+
+                  <p className="leading-relaxed text-gray-300">
+                    NEVAS.AI was founded by a collective of engineers and fashion industry veterans who saw a gap: fashion
+                    brands were drowning in data but starving for insight. We built our enterprise AI platform to turn that
+                    noise into action.
+                  </p>
+
+                  <p className="leading-relaxed text-gray-400">
+                    From virtual try-on technology that reduces returns, to demand forecasting that eliminates waste, our
+                    solutions are purpose-built for the unique rhythm of the apparel industry.
+                  </p>
+
+                  <div className="pt-2">
+                    <a href="#contact" className="hud-book-btn hud-book-btn--purple group w-fit gap-2">
+                      <span>Get your free fabric-waste estimate</span>
+                      <ArrowRight className="h-4 w-4 text-cyber-purple transition-transform group-hover:translate-x-1" />
+                    </a>
+                  </div>
+                </div>
+
+                {/* Scanner Card */}
+                <div className="h-[320px] w-full sm:h-[400px] lg:h-[450px]">
+                  <ScannerCard active={stageActive} reduced={reduced} />
+                </div>
+              </div>
+
+              {/* Bottom section: Stats */}
+              <div className="glass-panel mt-4 grid grid-cols-1 divide-y divide-white/10 rounded-2xl border border-white/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+                {stats.map((s) => (
+                  <div key={s.label} className="px-3 py-6 text-center sm:px-8 sm:py-8 sm:text-left">
+                    <AnimatedCounter 
+                      target={s.target} 
+                      suffix={s.suffix} 
+                      className={`text-4xl font-bold tabular-nums sm:text-5xl lg:text-6xl ${s.color}`} 
+                    />
+                    <div className="mt-2 text-xs tracking-wide text-gray-400">{s.label}</div>
+                  </div>
+                ))}
               </div>
             </motion.div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
