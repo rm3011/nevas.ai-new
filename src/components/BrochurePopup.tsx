@@ -29,7 +29,7 @@ export default function BrochurePopup() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
-            className="fixed inset-0 z-[90] bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-90 bg-black/60 backdrop-blur-sm"
           />
 
           {/* Centered Popup Card */}
@@ -38,9 +38,9 @@ export default function BrochurePopup() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed left-1/2 top-1/2 z-[100] w-full max-w-md -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl border border-cyber-cyan/30 bg-[#0a0f1c]/95 p-6 sm:p-8 shadow-[0_20px_80px_rgba(0,240,255,0.15)] backdrop-blur-xl"
+            className="fixed left-1/2 top-1/2 z-100 w-full max-w-md -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl border border-cyber-cyan/30 bg-[#0a0f1c]/95 p-6 sm:p-8 shadow-[0_20px_80px_rgba(0,240,255,0.15)] backdrop-blur-xl"
           >
-            <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-cyber-cyan/20 blur-[40px]" />
+            <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-cyber-cyan/20 blur-2xl" />
 
             <button 
               onClick={() => setIsOpen(false)}

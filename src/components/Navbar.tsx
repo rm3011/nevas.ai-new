@@ -69,7 +69,7 @@ function DownloadButton({
       href="#contact"
       onClick={handleClick}
       // Styled to match the HUD layout of the BookNow button, but with cyan accents
-      className={`hud-book-btn group !border-cyber-cyan/40 !bg-cyber-cyan/5 hover:!bg-cyber-cyan/10 ${className}`}
+      className={`hud-book-btn group border-cyber-cyan/40 bg-cyber-cyan/5 hover:bg-cyber-cyan/10 ${className}`}
       style={{
          // Custom overrides to match the "Book Now" button frame
          boxShadow: "0 0 20px rgba(0, 240, 255, 0.1), inset 0 0 10px rgba(0, 240, 255, 0.05)"

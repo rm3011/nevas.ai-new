@@ -123,11 +123,11 @@ export default function ContactSection() {
     <section
       id="contact"
       aria-labelledby="contact-heading"
-      className="relative isolate w-full overflow-hidden bg-[#040711] px-4 py-24 sm:px-6 lg:px-8"
+      className="relative isolate w-full overflow-hidden bg-cyber-bg px-4 py-24 sm:px-6 lg:px-8"
     >
       {/* Premium Background Effects */}
-      <div className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyber-purple/10 via-[#040711] to-[#040711]" />
-      <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-px w-1/2 -translate-x-1/2 bg-gradient-to-r from-transparent via-cyber-cyan/50 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-cyber-purple/10 via-cyber-bg to-cyber-bg" />
+      <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-px w-1/2 -translate-x-1/2 bg-linear-to-r from-transparent via-cyber-cyan/50 to-transparent" />
       
       {/* Grid Overlay */}
       <div 
@@ -171,10 +171,10 @@ export default function ContactSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ type: "spring", stiffness: 60, damping: 18 }}
-          className="relative mx-auto w-full overflow-hidden rounded-[2rem] border border-white/10 bg-[#0a0f1c]/80 shadow-[0_0_100px_-20px_rgba(168,85,247,0.15)] backdrop-blur-3xl"
+          className="relative mx-auto w-full overflow-hidden rounded-4xl border border-white/10 bg-[#0a0f1c]/80 shadow-[0_0_100px_-20px_rgba(168,85,247,0.15)] backdrop-blur-3xl"
         >
           {/* Subtle inner glow */}
-          <div className="pointer-events-none absolute inset-0 rounded-[2rem] border border-white/5" />
+          <div className="pointer-events-none absolute inset-0 rounded-4xl border border-white/5" />
 
           {/* SWAPPED GRID COLUMNS: Form left, Info right */}
           <div className="grid lg:grid-cols-[minmax(0,1.1fr)_minmax(380px,0.9fr)]">
@@ -205,7 +205,7 @@ export default function ContactSection() {
                   <Field label="How can we help you?" value={form.message} onChange={(v) => update("message", v)} textarea required />
                 </div>
 
-                <div className="mt-auto flex flex-col-reverse items-start justify-between gap-6 border-t border-white/[0.08] pt-8 sm:flex-row sm:items-center">
+                <div className="mt-auto flex flex-col-reverse items-start justify-between gap-6 border-t border-white/8 pt-8 sm:flex-row sm:items-center">
                   <div aria-live="polite" className="min-h-5 font-mono text-xs">
                     {status === "sending" && <span className="text-gray-400">// Sending…</span>}
                     {status === "sent" && <span className="text-cyber-cyan">// Message sent — we'll be in touch</span>}
@@ -225,7 +225,7 @@ export default function ContactSection() {
             </div>
 
             {/* RIGHT SIDE: Info & Image */}
-            <aside className="relative isolate flex min-h-[540px] flex-col overflow-hidden border-t border-white/10 bg-gradient-to-bl from-[#0c1221] via-[#080d19] to-[#050812] p-8 sm:p-10 lg:min-h-full lg:border-l lg:border-t-0 lg:p-12">
+            <aside className="relative isolate flex min-h-135 flex-col overflow-hidden border-t border-white/10 bg-linear-to-bl from-[#0c1221] via-[#080d19] to-[#050812] p-8 sm:p-10 lg:min-h-full lg:border-l lg:border-t-0 lg:p-12">
               
               <div className="relative z-20 max-w-[75%] lg:max-w-[65%]">
                 <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.2em] text-cyber-cyan">
@@ -240,14 +240,14 @@ export default function ContactSection() {
                     const Icon = item.icon;
                     const inner = (
                       <span className="group flex items-center gap-4">
-                        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-cyber-cyan transition-all duration-300 group-hover:border-cyber-cyan/50 group-hover:bg-cyber-cyan/10 group-hover:shadow-[0_0_20px_rgba(0,240,255,0.2)]">
+                        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/3 text-cyber-cyan transition-all duration-300 group-hover:border-cyber-cyan/50 group-hover:bg-cyber-cyan/10 group-hover:shadow-[0_0_20px_rgba(0,240,255,0.2)]">
                           <Icon className="h-5 w-5" aria-hidden="true" />
                         </span>
                         <span className="min-w-0">
                           <span className="block text-[10px] font-semibold uppercase tracking-[0.16em] text-gray-500 group-hover:text-gray-400 transition-colors">
                             {item.icon === Phone ? "Phone" : item.icon === Mail ? "Email" : "Address"}
                           </span>
-                          <span className="mt-1 block break-words text-sm font-medium leading-relaxed text-gray-200 group-hover:text-white transition-colors">
+                          <span className="mt-1 block wrap-break-word text-sm font-medium leading-relaxed text-gray-200 group-hover:text-white transition-colors">
                             {item.label}
                           </span>
                         </span>
@@ -271,11 +271,11 @@ export default function ContactSection() {
               {/* Premium Image Treatment (Adjusted for right side) */}
               <div className="absolute inset-y-0 right-0 flex w-[45%] items-end justify-end lg:w-[40%]">
                 <div className="pointer-events-none absolute bottom-0 right-0 h-64 w-64 rounded-full bg-cyber-purple/20 blur-[90px]" />
-                <div className="pointer-events-none absolute bottom-0 right-0 h-full w-full bg-gradient-to-t from-[#050812] via-transparent to-transparent z-10" />
+                <div className="pointer-events-none absolute bottom-0 right-0 h-full w-full bg-linear-to-t from-[#050812] via-transparent to-transparent z-10" />
                 <img
                   src={ownerImage}
                   alt="Nevas AI founder"
-                  className="pointer-events-none relative z-20 h-[260px] w-auto max-w-full object-contain object-bottom drop-shadow-[0_0_40px_rgba(168,85,247,0.3)] lg:h-[85%]"
+                  className="pointer-events-none relative z-20 h-65 w-auto max-w-full object-contain object-bottom drop-shadow-[0_0_40px_rgba(168,85,247,0.3)] lg:h-[85%]"
                   loading="lazy"
                   decoding="async"
                 />
@@ -290,7 +290,7 @@ export default function ContactSection() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={s.label}
-                    className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-gray-400 transition-all duration-300 hover:-translate-y-1 hover:border-cyber-purple/50 hover:bg-cyber-purple/10 hover:text-cyber-purple hover:shadow-[0_0_20px_rgba(168,85,247,0.2)]"
+                    className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/3 text-gray-400 transition-all duration-300 hover:-translate-y-1 hover:border-cyber-purple/50 hover:bg-cyber-purple/10 hover:text-cyber-purple hover:shadow-[0_0_20px_rgba(168,85,247,0.2)]"
                   >
                     <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
                       <path d={s.path} />

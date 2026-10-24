@@ -28,9 +28,9 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative isolate w-full overflow-hidden border-t border-white/5 bg-[#040711]">
+    <footer className="relative isolate w-full overflow-hidden border-t border-white/5 bg-cyber-bg">
       {/* Ambient Glows */}
-      <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[300px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyber-purple/10 blur-[120px]" />
+      <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-75 w-200 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyber-purple/10 blur-[120px]" />
       <div className="pointer-events-none absolute bottom-0 right-0 -z-10 h-64 w-64 translate-x-1/3 translate-y-1/3 rounded-full bg-cyber-cyan/5 blur-[100px]" />
 
       {/* Reduced outer padding from py-16 to py-8 sm:py-10 */}
@@ -85,7 +85,7 @@ export default function Footer() {
                 show: { opacity: 1, y: 0 }
               }}
               // Slightly smaller social icons
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.02] text-gray-400 transition-all duration-300 hover:-translate-y-1 hover:border-cyber-purple/50 hover:bg-cyber-purple/10 hover:text-cyber-purple hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] sm:h-10 sm:w-10"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/2 text-gray-400 transition-all duration-300 hover:-translate-y-1 hover:border-cyber-purple/50 hover:bg-cyber-purple/10 hover:text-cyber-purple hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] sm:h-10 sm:w-10"
             >
               <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-current sm:h-4 sm:w-4" aria-hidden="true">
                 <path d={s.path} />
@@ -95,7 +95,7 @@ export default function Footer() {
         </motion.div>
 
         {/* Divider - Reduced margins from my-10 to my-6 */}
-        <div className="my-6 h-px w-full max-w-3xl bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div className="my-6 h-px w-full max-w-3xl bg-linear-to-r from-transparent via-white/10 to-transparent" />
 
         {/* Bottom Bar */}
         <div className="flex w-full max-w-4xl flex-col items-center justify-between gap-3 sm:flex-row">
