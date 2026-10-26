@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { ArrowRight, Menu, X, Download } from "lucide-react";
+import { ArrowRight, Menu, X } from "lucide-react";
 
 type NavLink = {
   href: string;
   label: string;
 };
-
-const BROCHURE_URL = "/nevas-brochure.pdf";
 
 const LINKS: NavLink[] = [
   { href: "/#about", label: "WHO WE ARE" },
@@ -30,52 +28,6 @@ function BookNowButton({
     >
       <span className="mr-2">Talk To Us Now</span>
       <ArrowRight className="w-4 h-4 text-cyber-purple group-hover:translate-x-1.5 transition-transform duration-200" />
-    </a>
-  );
-}
-
-function DownloadButton({
-  className = "",
-  onClick,
-}: {
-  className?: string;
-  onClick?: () => void;
-}) {
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    
-    // Check if the user has unlocked the brochure via the form
-    const isUnlocked = localStorage.getItem("nevas_brochure_unlocked") === "true";
-
-    if (isUnlocked) {
-      // Trigger PDF download
-      const link = document.createElement("a");
-      link.href = BROCHURE_URL;
-      link.download = "Nevas_AI_Textile_Brochure.pdf";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } else {
-      // Trigger the popup event
-      window.dispatchEvent(new Event("open-brochure-popup"));
-    }
-
-    if (onClick) onClick();
-  };
-
-  return (
-    <a
-      href="#contact"
-      onClick={handleClick}
-      // Styled to match the HUD layout of the BookNow button, but with cyan accents
-      className={`hud-book-btn group border-cyber-cyan/40 bg-cyber-cyan/5 hover:bg-cyber-cyan/10 ${className}`}
-      style={{
-         // Custom overrides to match the "Book Now" button frame
-         boxShadow: "0 0 20px rgba(0, 240, 255, 0.1), inset 0 0 10px rgba(0, 240, 255, 0.05)"
-      }}
-    >
-      <Download className="w-4 h-4 text-cyber-cyan mr-2 transition-transform group-hover:-translate-y-0.5" />
-      <span className="text-cyber-cyan font-semibold">Brochure</span>
     </a>
   );
 }
@@ -108,8 +60,8 @@ export default function Navbar() {
             ))}
           </nav>
 
-          <div className="hidden sm:flex items-center gap-3">
-            <DownloadButton />
+          {/* Only Book Now button on desktop */}
+          <div className="hidden sm:flex items-center">
             <BookNowButton />
           </div>
 
@@ -139,14 +91,11 @@ export default function Navbar() {
             </a>
           ))}
           
-          <div className="pt-2 flex flex-col gap-3">
-            <DownloadButton
-              onClick={() => setMobileOpen(false)}
-              className="w-full py-3 justify-center"
-            />
+          {/* Only Book Now button on mobile */}
+          <div className="pt-2">
             <BookNowButton
               onClick={() => setMobileOpen(false)}
-              className="w-full py-3"
+              className="w-full py-3 justify-center"
             />
           </div>
         </div>
