@@ -6,8 +6,7 @@ export default function BrochurePopup() {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    // 1. Show automatically after 4 seconds on every visit
-    const timer = setTimeout(() => setIsOpen(true), 4000);
+    const timer = setTimeout(() => setIsOpen(true), 5000);
 
     // 2. Listen for manual triggers from the Navbar
     const handleOpen = () => setIsOpen(true);

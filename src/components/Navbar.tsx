@@ -6,7 +6,6 @@ type NavLink = {
   label: string;
 };
 
-// The URL to your PDF (put the PDF in the public folder)
 const BROCHURE_URL = "/nevas-brochure.pdf";
 
 const LINKS: NavLink[] = [
@@ -43,7 +42,7 @@ function DownloadButton({
   onClick?: () => void;
 }) {
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault(); // Stop standard link navigation
+    e.preventDefault();
     
     // Check if the user has unlocked the brochure via the form
     const isUnlocked = localStorage.getItem("nevas_brochure_unlocked") === "true";
