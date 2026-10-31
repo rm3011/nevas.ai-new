@@ -206,7 +206,7 @@ export default function ContactSection() {
                   disabled={status === "sending"}
                   className="hud-book-btn hud-book-btn--purple group inline-flex items-center gap-3 px-7 py-3.5 text-base focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyber-cyan disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  <span>{status === "sending" ? "Sending…" : "Submit Form"}</span>
+                  <span>{status === "sending" ? "Sending…" : "Submit"}</span>
                   <ArrowRight className="h-5 w-5 text-cyber-purple transition-transform duration-300 group-hover:translate-x-1.5" />
                 </button>
               </div>
