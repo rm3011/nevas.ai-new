@@ -139,14 +139,14 @@ export default function ContactSection() {
               id="contact-heading"
               className="font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl"
             >
-              <span className="block overflow-hidden pb-[0.2em] -mb-[0.2em]">
+              <span className="block overflow-hidden pb-[0.2em] mb-[0.2em]">
                 <span data-line className="block">Let's weave something</span>
               </span>
               <span className="block overflow-hidden pb-[0.2em]">
                 <span data-line className="neon-text-gradient block">Together</span>
               </span>
             </h2>
-            <span data-stitch aria-hidden="true" className="mt-2 block h-px w-56 bg-linear-to-r from-cyber-cyan to-cyber-purple [mask-image:repeating-linear-gradient(90deg,#000_0_8px,transparent_8px_14px)]" />
+            <span data-stitch aria-hidden="true" className="mt-2 block h-px w-56 bg-linear-to-r from-cyber-cyan to-cyber-purple mask-[repeating-linear-gradient(90deg,#000_0_8px,transparent_8px_14px)]" />
 
             <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-6">
               <div className="grid gap-6 sm:grid-cols-2">
@@ -164,7 +164,7 @@ export default function ContactSection() {
               <Field label="How can we help you?" value={form.message} onChange={(v) => update("message", v)} textarea required />
 
               <div data-rise className="flex flex-col-reverse items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex flex-col gap-2 min-h-[44px] justify-center">
+                <div className="flex flex-col gap-2 min-h-11 justify-center">
                   
                   {/* Captcha Area matching your screenshot */}
                   <div className="flex items-center gap-3">
@@ -179,7 +179,7 @@ export default function ContactSection() {
                     </button>
 
                     {/* Canvas Image Container - White background for visibility */}
-                    <div className="bg-white rounded px-2 py-1 flex items-center justify-center min-w-[90px] min-h-[36px]">
+                    <div className="bg-white rounded px-2 py-1 flex items-center justify-center min-w-22.5 min-h-9">
                        <LoadCanvasTemplateNoReload />
                     </div>
 
@@ -214,12 +214,12 @@ export default function ContactSection() {
           </div>
 
           {/* Right: frameless cut-out standing on the fabric well */}
-          <div className="relative flex h-70 items-end justify-center sm:h-95 lg:h-[500px]">
+          <div className="relative flex h-70 items-end justify-center sm:h-95 lg:h-125">
             <span data-well aria-hidden="true" className="absolute bottom-3 left-1/2 block h-0 w-0" />
 
             <div aria-hidden="true" className="pointer-events-none absolute bottom-0 left-1/2 h-48 w-96 -translate-x-1/2 bg-[radial-gradient(ellipse_at_center,rgba(168,85,247,0.3),transparent_70%)]" />
 
-            <div aria-hidden="true" className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+            <div aria-hidden="true" className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
 
             <div className="relative h-full">
               <div data-image className="h-full">
@@ -237,7 +237,7 @@ export default function ContactSection() {
 
         {/* Contact strip */}
         <div className="relative mt-10 flex flex-col gap-6 pt-6 lg:flex-row lg:items-center lg:justify-between">
-          <span data-stitch aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-cyber-cyan/70 via-cyber-purple/60 to-transparent [mask-image:repeating-linear-gradient(90deg,#000_0_8px,transparent_8px_14px)]" />
+          <span data-stitch aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-cyber-cyan/70 via-cyber-purple/60 to-transparent mask-[repeating-linear-gradient(90deg,#000_0_8px,transparent_8px_14px)]" />
           <ul className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:gap-x-10">
             {CONTACT.map(({ icon: Icon, label, href }) => {
               const inner = (
@@ -305,7 +305,7 @@ function Field({ label, value, onChange, type = "text", required, textarea, inpu
         />
       )}
       <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px bg-white/15" />
-      <span data-underline aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-cyber-cyan to-cyber-purple [mask-image:repeating-linear-gradient(90deg,#000_0_6px,transparent_6px_11px)]" />
+      <span data-underline aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-cyber-cyan to-cyber-purple mask-[repeating-linear-gradient(90deg,#000_0_6px,transparent_6px_11px)]" />
       <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-linear-to-r from-cyber-cyan to-cyber-purple transition-transform duration-500 group-focus-within:scale-x-100" />
     </label>
   );

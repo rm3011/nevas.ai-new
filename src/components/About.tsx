@@ -31,7 +31,7 @@ const stagger: Variants = {
 
 function ScannerCard({ active, reduced }: { active: boolean; reduced: boolean }) {
   return (
-    <div className="glass-panel relative h-full min-h-[320px] w-full overflow-hidden rounded-2xl border border-cyber-cyan/30 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+    <div className="glass-panel relative h-full min-h-80 w-full overflow-hidden rounded-2xl border border-cyber-cyan/30 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
       <div
         aria-hidden="true"
         className="absolute inset-0 bg-[#070b1a]"
@@ -211,7 +211,7 @@ export default function About() {
                 </div>
 
                 {/* Scanner Card */}
-                <div className="h-[320px] w-full sm:h-[400px] lg:h-[450px]">
+                <div className="h-80 w-full sm:h-100 lg:h-112.5">
                   <ScannerCard active={stageActive} reduced={reduced} />
                 </div>
               </div>

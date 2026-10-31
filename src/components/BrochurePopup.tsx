@@ -92,7 +92,7 @@ export default function BrochurePopup() {
       {/* FLOATING CIRCULAR BUTTON (Above Chatbot) */}
       <button
         onClick={handleFloatingButtonClick}
-        className="fixed bottom-24 right-6 z-[80] flex h-12 w-12 items-center justify-center rounded-full border border-cyber-cyan/40 bg-[#0a0f1c]/80 text-cyber-cyan shadow-[0_0_20px_rgba(0,240,255,0.2)] backdrop-blur-md transition-all duration-300 hover:scale-110 hover:bg-cyber-cyan/10 sm:bottom-28 sm:right-8"
+        className="fixed bottom-24 right-6 z-80 flex h-12 w-12 items-center justify-center rounded-full border border-cyber-cyan/40 bg-[#0a0f1c]/80 text-cyber-cyan shadow-[0_0_20px_rgba(0,240,255,0.2)] backdrop-blur-md transition-all duration-300 hover:scale-110 hover:bg-cyber-cyan/10 sm:bottom-28 sm:right-8"
         aria-label="Download Brochure"
       >
         <Download className="h-5 w-5" />
@@ -107,7 +107,7 @@ export default function BrochurePopup() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 z-[90] bg-black/70 backdrop-blur-md"
+              className="fixed inset-0 z-90 bg-black/70 backdrop-blur-md"
             />
 
             {/* Centered Split-Screen Modal */}
@@ -116,7 +116,7 @@ export default function BrochurePopup() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="fixed left-1/2 top-1/2 z-[100] flex w-[95%] max-w-5xl -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-3xl border border-cyber-cyan/30 bg-[#0a0f1c] shadow-[0_30px_100px_rgba(0,240,255,0.15)] md:w-full md:flex-row"
+              className="fixed left-1/2 top-1/2 z-100 flex w-[95%] max-w-5xl -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-3xl border border-cyber-cyan/30 bg-[#0a0f1c] shadow-[0_30px_100px_rgba(0,240,255,0.15)] md:w-full md:flex-row"
             >
               <button 
                 onClick={() => setIsOpen(false)}
@@ -126,11 +126,11 @@ export default function BrochurePopup() {
               </button>
 
               {/* LEFT SIDE: 3D PDF Mockup (Hidden on Mobile) */}
-              <div className="relative hidden w-1/2 items-center justify-center overflow-hidden bg-gradient-to-br from-[#0c1221] to-[#040711] p-12 md:flex">
+              <div className="relative hidden w-1/2 items-center justify-center overflow-hidden bg-linear-to-br from-[#0c1221] to-cyber-bg p-12 md:flex">
                 <div className="pointer-events-none absolute -left-20 -top-20 h-64 w-64 rounded-full bg-cyber-cyan/20 blur-[100px]" />
                 
                 {/* Fake 3D Book */}
-                <div className="relative flex aspect-[1/1.4] w-full max-w-[280px] flex-col overflow-hidden rounded-r-xl rounded-l-sm border border-white/10 border-l-[6px] border-l-cyber-cyan bg-[#050914] p-6 shadow-[20px_20px_60px_rgba(0,0,0,0.8)]">
+                <div className="relative flex aspect-[1/1.4] w-full max-w-70 flex-col overflow-hidden rounded-r-xl rounded-l-sm border border-white/10 border-l-[6px] border-l-cyber-cyan bg-[#050914] p-6 shadow-[20px_20px_60px_rgba(0,0,0,0.8)]">
                   <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay" />
                   
                   {/* Book Logo */}

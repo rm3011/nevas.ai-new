@@ -79,10 +79,10 @@ export default function ScrollytellingGSAP() {
 
   return (
     <section ref={containerRef} className="relative h-[450vh] bg-cyber-bg text-white">
-      <div className="sticky top-0 isolate flex h-[100svh] items-center overflow-hidden bg-[#050014]">
+      <div className="sticky top-0 isolate flex h-svh items-center overflow-hidden bg-[#050014]">
         {/* Atmosphere */}
         <div className="aura absolute inset-0 -z-20 bg-[radial-gradient(ellipse_at_50%_36%,rgba(138,43,226,0.22),transparent_60%)] md:bg-[radial-gradient(ellipse_at_70%_50%,rgba(138,43,226,0.22),transparent_60%)]" />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#050014] via-[#050014]/60 to-transparent md:bg-gradient-to-r md:via-[#050014]/70" />
+        <div className="absolute inset-0 -z-10 bg-linear-to-t from-[#050014] via-[#050014]/60 to-transparent md:bg-linear-to-r md:via-[#050014]/70" />
 
         {/* Finished dress. Position is driven entirely by useWeaveCanvas's layout(). */}
         <img
@@ -90,14 +90,14 @@ export default function ScrollytellingGSAP() {
           src={dressSrc}
           alt="A neon dress woven from thousands of glowing threads"
           draggable={false}
-          className="dress-img pointer-events-none absolute -z-[5] opacity-0 mix-blend-screen [mask-image:radial-gradient(closest-side,#000_72%,transparent_100%)] will-change-[opacity,transform,filter]"
+          className="dress-img pointer-events-none absolute z-[-5] opacity-0 mix-blend-screen mask-[radial-gradient(closest-side,#000_72%,transparent_100%)] will-change-[opacity,transform,filter]"
         />
 
         {/* Threads */}
         <canvas
           ref={canvasRef}
           aria-hidden
-          className="thread-canvas pointer-events-none absolute inset-0 -z-[4] h-full w-full"
+          className="thread-canvas pointer-events-none absolute inset-0 z-5 h-full w-full"
         />
 
         {/* Progress rail */}

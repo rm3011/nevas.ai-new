@@ -110,7 +110,7 @@ export default function ServicesCarousel() {
   };
 
   return (
-    <section id="services" className="relative isolate w-full overflow-hidden bg-[#040711] py-20 px-4 sm:px-6 lg:px-14">
+    <section id="services" className="relative isolate w-full overflow-hidden bg-cyber-bg py-20 px-4 sm:px-6 lg:px-14">
       
       {/* Background Glows */}
       <div className="pointer-events-none absolute -left-40 top-20 -z-10 h-105 w-105 rounded-full bg-cyber-cyan/15 blur-[180px]" />
@@ -140,7 +140,7 @@ export default function ServicesCarousel() {
         </div>
 
         {/* Navigation Dock - Reduced margin bottom (mb-4) */}
-        <div className="mb-4 flex w-full snap-x gap-2 overflow-x-auto pb-4 [scrollbar-width:none] lg:justify-center">
+        <div className="mb-4 flex w-full snap-x gap-2 overflow-x-auto pb-4 scrollbar-none lg:justify-center">
           {SERVICES.map((service, index) => {
             const isActive = service.id === activeId;
             const Icon = service.icon;
@@ -167,7 +167,7 @@ export default function ServicesCarousel() {
         </div>
 
         {/* Carousel Container - Reduced min-height from 550 to 480 */}
-        <div className="relative min-h-[480px] w-full overflow-hidden rounded-3xl border border-cyber-cyan/20 bg-cyber-card shadow-[0_20px_80px_rgba(0,0,0,0.4)]">
+        <div className="relative min-h-120 w-full overflow-hidden rounded-3xl border border-cyber-cyan/20 bg-cyber-card shadow-[0_20px_80px_rgba(0,0,0,0.4)]">
           <AnimatePresence custom={direction} mode="wait">
             <motion.div
               key={active.id}
