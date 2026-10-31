@@ -106,7 +106,8 @@ function layout(W: number, H: number, ratio: number) {
   const desktop = W >= 768;
   const size = desktop ? Math.min(H * 0.94, W * 0.62) : Math.min(W, H * 0.58);
   const cx = desktop ? W * 0.7 : W * 0.5;
-  const cy = desktop ? H * 0.5 : H * 0.36;
+  // Mobile: push the dress down so the text (which is anchored to the top) stays legible.
+  const cy = desktop ? H * 0.5 : H * 0.68;
   return { x: cx - size / 2, y: cy - (size * ratio) / 2, w: size, h: size * ratio };
 }
 

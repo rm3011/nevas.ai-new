@@ -3,7 +3,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight } from "lucide-react";
-import robotImage from "../assets/robot-neural-networks.png";
+import robotImage from "../assets/conveyer-belt-image.jpeg";
 import { useNeuralAssemble, NN_TOTAL, type NNProgress } from "../hooks/useNeuralAssemble";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -75,10 +75,10 @@ export default function NeuralNetworks() {
             className="font-display text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl"
           >
             <span className="block overflow-hidden pb-[0.08em]">
-              <span className="nn-line neon-text-gradient block">Neural</span>
+              <span className="nn-line neon-text-gradient block">Artificial</span>
             </span>
             <span className="block overflow-hidden pb-[0.08em]">
-              <span className="nn-line neon-text-gradient block">Networks</span>
+              <span className="nn-line neon-text-gradient block">Intelligence</span>
             </span>
           </h2>
 

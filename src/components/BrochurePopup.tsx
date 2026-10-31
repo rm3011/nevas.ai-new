@@ -156,7 +156,7 @@ export default function BrochurePopup() {
               <div className="flex w-full flex-col justify-center p-6 sm:p-10 md:w-1/2 lg:p-14">
                 <div className="mb-8">
                   <h3 className="font-display text-2xl font-bold text-white sm:text-3xl">
-                    Download the Brochure
+                    Download the Report
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-gray-400">
                     Enter your details below to get instant access to our comprehensive guide on AI-driven textile manufacturing.
@@ -197,7 +197,7 @@ export default function BrochurePopup() {
                     className="hud-book-btn hud-book-btn--purple group mt-4 w-full justify-center py-4 text-base disabled:opacity-50"
                   >
                     <span className="mr-2">
-                      {status === "loading" ? "Preparing Download..." : "Get My Free Brochure"}
+                      {status === "loading" ? "Preparing Download..." : "Get My Free Report"}
                     </span>
                     <Download className="h-5 w-5 text-cyber-purple transition-transform duration-200 group-hover:-translate-y-1" />
                   </button>

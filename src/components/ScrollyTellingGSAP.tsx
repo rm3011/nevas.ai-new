@@ -7,12 +7,15 @@ import { useWeaveCanvas, type Progress } from "../hooks/useWeaveCanvas";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-// One master timeline = 10 units. Everything below is positioned on it.
+// One master timeline = 9 units. Everything below is positioned on it.
 //  0 ─ 2     Phase 01 (threads begin to arrive)
 //  2 ─ 4     Phase 02
 //  4 ─ 6     Phase 03
-//  7 ─ 9     the real dress "develops" over the woven threads
-//  7.6 ─ 10  Phase 04
+//  6.4 ─ 9   the real dress "develops" over the woven threads (ends EXACTLY at 9)
+//  7.4 ─ 9   Phase 04
+//
+// The reveal lands on the final unit, so the next scroll tick releases the
+// pinned section immediately — no dead scroll space after the image is shown.
 
 export default function ScrollytellingGSAP() {
   const containerRef = useRef<HTMLElement>(null);
@@ -38,28 +41,28 @@ export default function ScrollytellingGSAP() {
           },
         });
 
-        // drives the canvas
-        tl.to(progress, { p: 1, duration: 10 }, 0)
-          .fromTo(".progress-bar", { scaleY: 0 }, { scaleY: 1, duration: 10 }, 0)
+        // drives the canvas (9-unit master timeline)
+        tl.to(progress, { p: 1, duration: 9 }, 0)
+          .fromTo(".progress-bar", { scaleY: 0 }, { scaleY: 1, duration: 9 }, 0)
           .to(".scroll-hint", { autoAlpha: 0, duration: 0.5 }, 0)
 
           // story
-          .to(".step-1", { autoAlpha: 0, y: -24, duration: 0.5, ease: "power1.in" }, 1.5)
-          .fromTo(".step-2", { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" }, 2)
-          .to(".step-2", { autoAlpha: 0, y: -24, duration: 0.5, ease: "power1.in" }, 3.5)
-          .fromTo(".step-3", { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" }, 4)
-          .to(".step-3", { autoAlpha: 0, y: -24, duration: 0.5, ease: "power1.in" }, 5.5)
-          .fromTo(".step-4", { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out" }, 7.6)
+          .to(".step-1", { autoAlpha: 0, y: -24, duration: 0.5, ease: "power1.in" }, 1.3)
+          .fromTo(".step-2", { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" }, 1.8)
+          .to(".step-2", { autoAlpha: 0, y: -24, duration: 0.5, ease: "power1.in" }, 3.2)
+          .fromTo(".step-3", { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" }, 3.7)
+          .to(".step-3", { autoAlpha: 0, y: -24, duration: 0.5, ease: "power1.in" }, 5.2)
+          .fromTo(".step-4", { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out" }, 7.4)
 
-          // the real dress develops out of the threads
+          // the real dress develops out of the threads — ends EXACTLY at unit 9
           .fromTo(
             ".dress-img",
             { autoAlpha: 0, scale: 1.06, filter: "blur(14px) brightness(1.8)" },
-            { autoAlpha: 1, scale: 1, filter: "blur(0px) brightness(1)", duration: 2.2, ease: "power2.out" },
-            7
+            { autoAlpha: 1, scale: 1, filter: "blur(0px) brightness(1)", duration: 2.6, ease: "power2.out" },
+            6.4
           )
-          .to(".thread-canvas", { opacity: 0.4, duration: 2 }, 7.4)
-          .fromTo(".aura", { opacity: 0.35, scale: 0.9 }, { opacity: 1, scale: 1.1, duration: 4 }, 6);
+          .to(".thread-canvas", { opacity: 0.4, duration: 2.6 }, 6.4)
+          .fromTo(".aura", { opacity: 0.35, scale: 0.9 }, { opacity: 1, scale: 1.1, duration: 4 }, 5);
       });
 
       // Reduced motion: show the finished dress + final message, no scrubbing
@@ -75,13 +78,13 @@ export default function ScrollytellingGSAP() {
   );
 
   return (
-    <section ref={containerRef} className="relative h-[600vh] bg-cyber-bg text-white">
+    <section ref={containerRef} className="relative h-[450vh] bg-cyber-bg text-white">
       <div className="sticky top-0 isolate flex h-[100svh] items-center overflow-hidden bg-[#050014]">
         {/* Atmosphere */}
         <div className="aura absolute inset-0 -z-20 bg-[radial-gradient(ellipse_at_50%_36%,rgba(138,43,226,0.22),transparent_60%)] md:bg-[radial-gradient(ellipse_at_70%_50%,rgba(138,43,226,0.22),transparent_60%)]" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#050014] via-[#050014]/60 to-transparent md:bg-gradient-to-r md:via-[#050014]/70" />
 
-        {/* Finished dress. `screen` blend drops its dark backdrop so only the neon remains */}
+        {/* Finished dress. Position is driven entirely by useWeaveCanvas's layout(). */}
         <img
           ref={imgRef}
           src={dressSrc}
@@ -102,8 +105,9 @@ export default function ScrollytellingGSAP() {
           <div className="progress-bar h-full w-full origin-top bg-cyber-cyan" />
         </div>
 
-        {/* Story */}
-        <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl items-end px-6 pb-[9svh] sm:px-14 md:items-center md:pb-0">
+        {/* Story. Mobile: anchored to the top so it never sits under the dress.
+            Desktop: original centered layout. */}
+        <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl items-start px-6 pt-[15vh] sm:px-14 md:items-center md:pt-0">
           <div className="grid max-w-md">
             <div className="step-1 [grid-area:1/1]">
               <p className="mb-4 font-mono text-sm uppercase tracking-widest text-cyber-cyan">Phase 01 // The Challenge</p>
