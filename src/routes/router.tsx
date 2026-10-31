@@ -1,6 +1,7 @@
 import { lazy, Suspense, type ReactNode } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
+import NotFound from "../pages/NotFound"; 
 
 const Home = lazy(() => import("../pages/Home"));
 const Blogs = lazy(() => import("../pages/Blogs"));
@@ -25,10 +26,12 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
+    errorElement: <NotFound />,
     children: [
       { index: true, element: lazyPage(<Home />) },
       { path: "blogs", element: lazyPage(<Blogs />) },
       { path: "blogs/:slug", element: lazyPage(<BlogPost />) },
+      { path: "*", element: <NotFound /> }
     ],
   },
 ]);
