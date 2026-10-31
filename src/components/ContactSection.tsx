@@ -1,9 +1,14 @@
 import { useRef, useState, useEffect, type FormEvent } from "react";
-import { Mail, MapPin, Phone, ArrowRight } from "lucide-react";
+import { Mail, MapPin, Phone, ArrowRight, RefreshCw } from "lucide-react";
 import emailjs from "@emailjs/browser";
 import ownerImage from "../assets/owner-optimized.png";
 import { BROCHURE_URL } from "../utils/brochure";
 import { useContactAnimation } from "../hooks/useContactanimation";
+import { 
+  loadCaptchaEnginge, 
+  LoadCanvasTemplateNoReload, 
+  validateCaptcha 
+} from "react-simple-captcha";
 
 const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
 const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
@@ -19,7 +24,6 @@ const CONTACT = [
   },
 ];
 
-/* Reveal is plain CSS. The hook only toggles data-js (arms hidden start) and data-in (reveal). */
 const CONTACT_CSS = `
 @media (prefers-reduced-motion: no-preference) {
   #contact[data-js] [data-rise] { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .8s cubic-bezier(.16,1,.3,1); }
@@ -41,12 +45,16 @@ export default function ContactSection() {
   const [form, setForm] = useState<FormState>(EMPTY);
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
+  // Captcha state
+  const [captchaInput, setCaptchaInput] = useState("");
+
   useContactAnimation(root);
 
-  // Focus the first input when the user clicks "Submit Details" from the popup
   useEffect(() => {
+    // Initialize captcha engine with 4 characters
+    loadCaptchaEnginge(4);
+    
     const handleFocus = () => {
-      // Small timeout ensures the browser finishes scrolling to #contact before focusing
       setTimeout(() => firstNameRef.current?.focus(), 600);
     };
     window.addEventListener("focus-contact-form", handleFocus);
@@ -58,8 +66,16 @@ export default function ContactSection() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    // Validate captcha (false = don't reload captcha on failure so user can try again)
+    if (!validateCaptcha(captchaInput, false)) {
+      setStatus("error");
+      setTimeout(() => setStatus("idle"), 4000);
+      return;
+    }
+
     setStatus("sending");
-    
+
     try {
       await emailjs.send(
         EMAILJS_SERVICE_ID,
@@ -72,12 +88,14 @@ export default function ContactSection() {
         },
         { publicKey: EMAILJS_PUBLIC_KEY }
       );
-      
+
       setStatus("sent");
       setForm(EMPTY);
+      setCaptchaInput("");
+      loadCaptchaEnginge(4); // Generate a new captcha for next time
+
       localStorage.setItem("nevas_brochure_unlocked", "true");
 
-      // Trigger the PDF download
       const link = document.createElement("a");
       link.href = BROCHURE_URL;
       link.download = "nevas-brochure.pdf";
@@ -89,8 +107,7 @@ export default function ContactSection() {
       console.error("[contact] EmailJS error:", err);
       setStatus("error");
     }
-    
-    // Reset the status message after 4 seconds
+
     setTimeout(() => setStatus("idle"), 4000);
   };
 
@@ -104,7 +121,6 @@ export default function ContactSection() {
       <style>{CONTACT_CSS}</style>
       <div className="pointer-events-none absolute inset-0 -z-30 bg-[radial-gradient(ellipse_at_bottom_right,var(--tw-gradient-stops))] from-cyber-purple/15 via-cyber-bg to-cyber-bg" />
 
-      {/* Spacetime fabric */}
       <canvas
         data-fabric
         aria-hidden="true"
@@ -113,7 +129,7 @@ export default function ContactSection() {
 
       <div className="mx-auto max-w-7xl">
         <div className="grid items-end gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-16">
-          
+
           {/* Left: headline + form */}
           <div>
             <p data-rise className="mb-4 text-sm font-medium text-cyber-cyan">
@@ -134,12 +150,12 @@ export default function ContactSection() {
 
             <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-6">
               <div className="grid gap-6 sm:grid-cols-2">
-                <Field 
+                <Field
                   inputRef={firstNameRef}
-                  label="First name" 
-                  value={form.firstName} 
-                  onChange={(v) => update("firstName", v)} 
-                  required 
+                  label="First name"
+                  value={form.firstName}
+                  onChange={(v) => update("firstName", v)}
+                  required
                 />
                 <Field label="Last name" value={form.lastName} onChange={(v) => update("lastName", v)} />
                 <Field label="Email address" type="email" value={form.email} onChange={(v) => update("email", v)} required />
@@ -148,11 +164,43 @@ export default function ContactSection() {
               <Field label="How can we help you?" value={form.message} onChange={(v) => update("message", v)} textarea required />
 
               <div data-rise className="flex flex-col-reverse items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <p aria-live="polite" className="min-h-5 text-sm">
-                  {status === "sending" && <span className="text-gray-400">Sending…</span>}
-                  {status === "sent" && <span className="text-cyber-cyan">Message sent. Your brochure is downloading.</span>}
-                  {status === "error" && <span className="text-cyber-pink">Couldn't send. Please try again.</span>}
-                </p>
+                <div className="flex flex-col gap-2 min-h-[44px] justify-center">
+                  
+                  {/* Captcha Area matching your screenshot */}
+                  <div className="flex items-center gap-3">
+                    {/* Refresh Button */}
+                    <button 
+                      type="button" 
+                      onClick={() => loadCaptchaEnginge(4)}
+                      className="text-gray-400 hover:text-white transition-colors"
+                      title="Refresh Captcha"
+                    >
+                      <RefreshCw className="h-5 w-5" />
+                    </button>
+
+                    {/* Canvas Image Container - White background for visibility */}
+                    <div className="bg-white rounded px-2 py-1 flex items-center justify-center min-w-[90px] min-h-[36px]">
+                       <LoadCanvasTemplateNoReload />
+                    </div>
+
+                    {/* Input Field */}
+                    <input
+                      type="text"
+                      value={captchaInput}
+                      onChange={(e) => setCaptchaInput(e.target.value)}
+                      placeholder="Captcha"
+                      required
+                      className="w-28 bg-transparent border border-white/20 rounded px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-cyber-cyan"
+                    />
+                  </div>
+
+                  <p aria-live="polite" className="min-h-5 text-sm">
+                    {status === "sending" && <span className="text-gray-400">Sending…</span>}
+                    {status === "sent" && <span className="text-cyber-cyan">Message sent. Your brochure is downloading.</span>}
+                    {status === "error" && <span className="text-cyber-pink">Couldn't send. Please verify captcha and try again.</span>}
+                  </p>
+                </div>
+
                 <button
                   type="submit"
                   disabled={status === "sending"}
@@ -168,11 +216,9 @@ export default function ContactSection() {
           {/* Right: frameless cut-out standing on the fabric well */}
           <div className="relative flex h-70 items-end justify-center sm:h-95 lg:h-[500px]">
             <span data-well aria-hidden="true" className="absolute bottom-3 left-1/2 block h-0 w-0" />
-            
-            {/* Ambient purple glow */}
+
             <div aria-hidden="true" className="pointer-events-none absolute bottom-0 left-1/2 h-48 w-96 -translate-x-1/2 bg-[radial-gradient(ellipse_at_center,rgba(168,85,247,0.3),transparent_70%)]" />
-            
-            {/* NEW: Mild black shadow to ground the image and hide the cut-off */}
+
             <div aria-hidden="true" className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
 
             <div className="relative h-full">
@@ -236,7 +282,6 @@ function Field({ label, value, onChange, type = "text", required, textarea, inpu
 
   return (
     <label data-rise className="group relative block">
-      {/* Changed text-xs to text-sm (2px larger) and added font-semibold */}
       <span className="mb-1 block text-sm font-semibold text-gray-400 transition-colors group-focus-within:text-cyber-cyan">
         {label}
         {required && <span className="text-cyber-purple"> *</span>}
