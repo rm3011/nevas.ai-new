@@ -5,12 +5,8 @@ import gsap from "gsap";
  * Weaving engine
  * ----------------------------------------------------------------------------
  * 1. Reads dress.png once, and picks N target points from its bright pixels
- *    (neon edges are weighted heavier). Each target keeps the pixel's colour.
- * 2. Every thread is a pre-computed S-curve from off-screen to its target,
- *    finishing with a short vertical "warp" strand (so the dress ends up looking
- *    woven, not star-bursted).
- * 3. Per frame we only draw a short moving window of each thread (head + tail),
- *    batched by colour bucket -> ~30 stroke() calls for 1000+ threads.
+ * 2. Every thread is a pre-computed S-curve from off-screen to its target.
+ * 3. Per frame we only draw a short moving window of each thread (head + tail).
  * 4. Renders ONLY when scroll progress changed. Idle scroll = zero GPU/CPU.
  */
 
@@ -104,10 +100,10 @@ function sampleDress(img: HTMLImageElement, count: number): Target[] {
 
 function layout(W: number, H: number, ratio: number) {
   const desktop = W >= 768;
-  const size = desktop ? Math.min(H * 0.94, W * 0.62) : Math.min(W, H * 0.58);
+  // Mobile layout fix applied here
+  const size = desktop ? Math.min(H * 0.94, W * 0.62) : Math.min(W * 0.92, H * 0.46);
   const cx = desktop ? W * 0.7 : W * 0.5;
-  // Mobile: push the dress down so the text (which is anchored to the top) stays legible.
-  const cy = desktop ? H * 0.5 : H * 0.68;
+  const cy = desktop ? H * 0.5 : H * 0.62; 
   return { x: cx - size / 2, y: cy - (size * ratio) / 2, w: size, h: size * ratio };
 }
 
@@ -140,7 +136,7 @@ export function useWeaveCanvas(
     };
 
     function build() {
-      if (!targets.length) return;
+      if (!targets.length || W === 0) return;
       const rect = layout(W, H, ratio);
       reveal!.style.cssText += `;left:${rect.x}px;top:${rect.y}px;width:${rect.w}px;height:${rect.h}px`;
 
@@ -156,13 +152,11 @@ export function useWeaveCanvas(
         const tx = rect.x + t.u * rect.w;
         const ty = rect.y + t.v * rect.h;
 
-        // origin: any direction, always off the dress
         const ang = rand() * Math.PI * 2;
         const rad = 0.8 + rand() * 0.4;
         const ox = cx + Math.cos(ang) * R * rad;
         const oy = cy + Math.sin(ang) * R * rad;
 
-        // end of the curve: a little above target, then a vertical warp strand
         const drape = (10 + rand() * 26) * (rect.w / 700);
         const ax = tx;
         const ay = ty - drape;
@@ -170,7 +164,6 @@ export function useWeaveCanvas(
         const dy = ay - oy;
         const L = Math.hypot(dx, dy) || 1;
 
-        // alternate swirl direction => threads cross each other (the "weave")
         const swirl = (i % 2 ? 1 : -1) * (0.15 + rand() * 0.35);
         const p1x = ox + dx * 0.3 - (dy / L) * swirl * L;
         const p1y = oy + dy * 0.3 + (dx / L) * swirl * L;
@@ -192,7 +185,6 @@ export function useWeaveCanvas(
         pts[SEG * 2] = tx;
         pts[SEG * 2 + 1] = ty;
 
-        // top of the dress weaves first, hem last
         const delay = 0.55 * t.v + 0.45 * rand();
         const thread: Thread = {
           pts,
@@ -220,6 +212,10 @@ export function useWeaveCanvas(
 
     function resize() {
       const rect = parent.getBoundingClientRect();
+      
+      // Production fix: Guard against 0-width calculation before CSS loads
+      if (rect.width === 0) return; 
+
       W = rect.width;
       H = rect.height;
       dpr = Math.min(window.devicePixelRatio || 1, isSmall() ? 1.5 : 2);
@@ -231,7 +227,7 @@ export function useWeaveCanvas(
     function draw(P: number) {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
-      ctx.globalCompositeOperation = "lighter"; // overlaps glow, no blur filter needed
+      ctx.globalCompositeOperation = "lighter"; 
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
 

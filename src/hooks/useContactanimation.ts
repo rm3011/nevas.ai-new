@@ -53,7 +53,7 @@ export function useContactAnimation(root: RefObject<HTMLElement | null>) {
     };
 
     // 2. Draw Logic
-    const trace = (horizontal: boolean, i: number, count: number, frac: number) => {
+    const trace = (horizontal: boolean, i: number, frac: number) => {
       const sig2 = 2 * Math.max(200, Math.min(w, 1200) * 0.17) ** 2;
       const wx = cx + state.px;
       const n = Math.floor(STEPS * frac);
@@ -99,7 +99,7 @@ export function useContactAnimation(root: RefObject<HTMLElement | null>) {
       // Weft (horizontal)
       ctx.beginPath();
       for (let i = 0; i <= ROWS; i++) {
-        trace(true, i, ROWS, clamp01(state.weave * 1.5 - (i / ROWS) * 0.5));
+        trace(true, i, clamp01(state.weave * 1.5 - (i / ROWS) * 0.5));
       }
       ctx.strokeStyle = `rgba(168,85,247,${weftAlpha})`;
       ctx.stroke();
@@ -109,7 +109,7 @@ export function useContactAnimation(root: RefObject<HTMLElement | null>) {
       // Calculate how many vertical lines fit across the screen based on the spacing
       const actualCols = Math.max(COLS, Math.floor(w / spacing));
       for (let j = 0; j <= actualCols; j++) {
-        trace(false, j, actualCols, clamp01(state.weave * 1.5 - (j / actualCols) * 0.5));
+        trace(false, j, clamp01(state.weave * 1.5 - (j / actualCols) * 0.5));
       }
       ctx.strokeStyle = `rgba(0,240,255,${warpAlpha})`;
       ctx.stroke();

@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -13,9 +13,6 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 //  4 ─ 6     Phase 03
 //  6.4 ─ 9   the real dress "develops" over the woven threads (ends EXACTLY at 9)
 //  7.4 ─ 9   Phase 04
-//
-// The reveal lands on the final unit, so the next scroll tick releases the
-// pinned section immediately — no dead scroll space after the image is shown.
 
 export default function ScrollytellingGSAP() {
   const containerRef = useRef<HTMLElement>(null);
@@ -25,6 +22,21 @@ export default function ScrollytellingGSAP() {
 
   // draws threads whenever progress.p changes
   useWeaveCanvas(canvasRef, imgRef, progress, dressSrc);
+
+  // Ensure ScrollTrigger recalculates heights after CSS and images have loaded in production
+  useEffect(() => {
+    const handleRefresh = () => ScrollTrigger.refresh();
+    
+    // Refresh on window load
+    window.addEventListener("load", handleRefresh);
+    
+    // Also refresh if fonts load slightly later (avoids layout shift)
+    if (document.fonts) {
+      document.fonts.ready.then(handleRefresh);
+    }
+
+    return () => window.removeEventListener("load", handleRefresh);
+  }, []);
 
   useGSAP(
     () => {
@@ -38,6 +50,9 @@ export default function ScrollytellingGSAP() {
             start: "top top",
             end: "bottom bottom",
             scrub: 0.6,
+            // CRITICAL for production: forces GSAP to remeasure the container height
+            // whenever the window resizes or a refresh is triggered.
+            invalidateOnRefresh: true,
           },
         });
 
@@ -105,8 +120,7 @@ export default function ScrollytellingGSAP() {
           <div className="progress-bar h-full w-full origin-top bg-cyber-cyan" />
         </div>
 
-        {/* Story. Mobile: anchored to the top so it never sits under the dress.
-            Desktop: original centered layout. */}
+        {/* Story. Mobile: anchored to the top so it never sits under the dress. Desktop: original centered layout. */}
         <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl items-start px-6 pt-[15vh] sm:px-14 md:items-center md:pt-0">
           <div className="grid max-w-md">
             <div className="step-1 [grid-area:1/1]">
