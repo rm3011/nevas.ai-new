@@ -163,7 +163,7 @@ export default function ContactSection() {
               </div>
               <Field label="How can we help you?" value={form.message} onChange={(v) => update("message", v)} textarea required />
 
-              <div data-rise className="flex flex-col-reverse items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div data-rise className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex flex-col gap-2 min-h-11 justify-center">
                   
                   {/* Captcha Area matching your screenshot */}

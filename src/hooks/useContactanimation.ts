@@ -38,7 +38,6 @@ export function useContactAnimation(root: RefObject<HTMLElement | null>) {
       const newW = Math.round(rect.width);
       const newH = Math.round(rect.height);
       
-      // Only resize if necessary (prevents canvas clearing bugs)
       if (w !== newW || h !== newH) {
         w = newW;
         h = newH;
@@ -60,10 +59,19 @@ export function useContactAnimation(root: RefObject<HTMLElement | null>) {
       const n = Math.floor(STEPS * frac);
       if (n < 1) return;
 
+      // FIX: Use the smaller dimension (width on mobile) to calculate spacing
+      // This ensures the grid always forms perfect squares.
+      const gridSize = Math.min(w, h);
+      const spacing = gridSize / ROWS;
+
       for (let k = 0; k <= n; k++) {
         const u = k / STEPS;
-        const x = horizontal ? u * w : (i / count) * w;
-        const y = horizontal ? (i / count) * h : u * h;
+        
+        // If horizontal, it spans the full width, but steps down proportionally.
+        // If vertical, it spans the full height, but steps across proportionally.
+        const x = horizontal ? u * w : i * spacing;
+        const y = horizontal ? i * spacing : u * h;
+
         const dx = x - wx;
         const dy = y - cy;
         const g = Math.exp(-(dx * dx + dy * dy) / sig2) * state.depth;
@@ -80,20 +88,30 @@ export function useContactAnimation(root: RefObject<HTMLElement | null>) {
       ctx.lineWidth = 1;
       ctx.setLineDash([]);
 
+      // FIX: Reduce brightness on mobile (width < 768px)
+      const isMobile = w < 768;
+      const weftAlpha = isMobile ? 0.08 : 0.22;  // Original was 0.22
+      const warpAlpha = isMobile ? 0.06 : 0.18;  // Original was 0.18
+
+      const gridSize = Math.min(w, h);
+      const spacing = gridSize / ROWS;
+
       // Weft (horizontal)
       ctx.beginPath();
       for (let i = 0; i <= ROWS; i++) {
         trace(true, i, ROWS, clamp01(state.weave * 1.5 - (i / ROWS) * 0.5));
       }
-      ctx.strokeStyle = "rgba(168,85,247,0.22)";
+      ctx.strokeStyle = `rgba(168,85,247,${weftAlpha})`;
       ctx.stroke();
 
       // Warp (vertical)
       ctx.beginPath();
-      for (let j = 0; j <= COLS; j++) {
-        trace(false, j, COLS, clamp01(state.weave * 1.5 - (j / COLS) * 0.5));
+      // Calculate how many vertical lines fit across the screen based on the spacing
+      const actualCols = Math.max(COLS, Math.floor(w / spacing));
+      for (let j = 0; j <= actualCols; j++) {
+        trace(false, j, actualCols, clamp01(state.weave * 1.5 - (j / actualCols) * 0.5));
       }
-      ctx.strokeStyle = "rgba(0,240,255,0.18)";
+      ctx.strokeStyle = `rgba(0,240,255,${warpAlpha})`;
       ctx.stroke();
 
       // Rings & Needles
@@ -134,7 +152,6 @@ export function useContactAnimation(root: RefObject<HTMLElement | null>) {
         const nx = Math.cos(angle) * rx;
         const ny = Math.sin(angle) * ry;
         
-        // Simplified needle glow (much faster than createRadialGradient)
         ctx.globalAlpha = k;
         ctx.fillStyle = `rgba(${g.rgb}, 0.9)`;
         ctx.beginPath();
