@@ -60,7 +60,7 @@ export default function NeuralNetworks() {
     >
       <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 sm:px-6 md:grid-cols-[1.05fr_0.95fr] lg:px-14">
         {/* Robot assembles here. Decorative, so hidden from screen readers. */}
-        <div aria-hidden="true" className="relative h-88 sm:h-112 md:h-136 lg:h-60">
+        <div aria-hidden="true" className="relative h-88 sm:h-112 md:h-136 lg:h-160">
           <div className="nn-aura absolute inset-0 -z-10 bg-[radial-gradient(closest-side,rgba(60,90,255,0.28),transparent)]" />
           <canvas ref={canvasRef} className="absolute inset-0 h-full w-full mix-blend-screen" />
         </div>
